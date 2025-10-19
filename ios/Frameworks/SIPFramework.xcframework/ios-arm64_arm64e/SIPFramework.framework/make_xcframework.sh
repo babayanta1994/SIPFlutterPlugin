@@ -25,7 +25,7 @@ xcodebuild archive \
   -sdk iphoneos \
   ARCHS="arm64 arm64e" \
   SKIP_INSTALL=NO \
-  BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+  BUILD_LIBRARY_FOR_DISTRIBUTION=YEScustomSessionName
 
 # === 生成 XCFramework ===
 echo "🛠️ 正在创建 XCFramework..."
