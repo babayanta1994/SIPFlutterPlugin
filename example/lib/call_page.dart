@@ -109,12 +109,14 @@ class _CallPageState extends State<CallPage> {
     if (widget.direction == 0) {
       // 主动呼叫
       if (widget.callType == SIPSDKConstants.SDK_CALL_TYPE_SERVER) {
-        SIPManage().call(widget.username!, widget.headers ?? {}).then((value) {
+        SIPManage()
+            .call(2, username: widget.username!, headers: widget.headers ?? {})
+            .then((value) {
           callUUID = value!;
         });
       } else {
         SIPManage()
-            .callIP(widget.remoteIp!, widget.headers ?? {})
+            .call(0, remoteIp: widget.remoteIp!, headers: widget.headers ?? {})
             .then((value) {
           callUUID = value!;
         });
@@ -343,9 +345,17 @@ class _CallPageState extends State<CallPage> {
                         //发送开锁消息
                         if (widget.callType ==
                             SIPSDKConstants.SDK_CALL_TYPE_IP) {
-                          SIPManage().sendMessageIP(widget.remoteIp!, "unlock");
+                          SIPManage().sendMessage(
+                            0,
+                            "unlock",
+                            remoteIp: widget.remoteIp!,
+                          );
                         } else {
-                          SIPManage().sendMessage(widget.username!, "unlock");
+                          SIPManage().sendMessage(
+                            2,
+                            "unlock",
+                            username: widget.username!,
+                          );
                         }
                       },
                     ),

@@ -1,29 +1,29 @@
 class SIPSDKLocalConfig {
+  final String? transport;
+  final int? port;
   final String? username;
-  final String? proxy;
-  final int proxyPort;
+  final String? boundAddr;
+  final String? publicAddr;
   final bool enableStreamControl;
   final int streamElapsed;
-  final int startKeyframeCount;
-  final int startKeyframeInterval;
 
   SIPSDKLocalConfig({
+    this.transport,
     this.username,
-    this.proxy,
-    this.proxyPort = 0,
+    this.port = 5060,
+    this.boundAddr,
+    this.publicAddr,
     this.enableStreamControl = false,
     this.streamElapsed = 0,
-    this.startKeyframeCount = 120,
-    this.startKeyframeInterval = 1000,
   });
 
   Map<String, dynamic> toJson() => {
-    'username': username,
-    'proxy': proxy,
-    'proxyPort': proxyPort,
-    'enableStreamControl': enableStreamControl,
-    'streamElapsed': streamElapsed,
-    'startKeyframeCount': startKeyframeCount,
-    'startKeyframeInterval': startKeyframeInterval,
-  };
+        'transport': transport,
+        'username': username,
+        'port': port,
+        'boundAddr': boundAddr,
+        'publicAddr': publicAddr,
+        'enableStreamControl': enableStreamControl,
+        'streamElapsed': streamElapsed,
+      };
 }

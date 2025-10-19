@@ -23,14 +23,20 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
             }
-        case "registrar":
+        case "localAccount":
             if let args = call.arguments as? [String: Any] {
-                registrar(args: args, result: result)
+                localAccount(args: args, result: result)
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
             }
-        case "unRegistrar":
-            unRegistrar(args: [:], result: result)
+        case "remoteAccount":
+            if let args = call.arguments as? [String: Any] {
+                remoteAccount(args: args, result: result)
+            } else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
+            }
+        case "delRemoteAccount":
+            delRemoteAccount(args: [:], result: result)
         case "cameraOpen":
             if let args = call.arguments as? [String: Any] {
                 cameraOpen(args: args, result: result)
@@ -42,12 +48,6 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         case "call":
             if let args = call.arguments as? [String: Any] {
                 self.call(args: args, result: result)
-            } else {
-                result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
-            }
-        case "callIP":
-            if let args = call.arguments as? [String: Any] {
-                callIP(args: args, result: result)
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
             }
@@ -66,12 +66,6 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         case "sendMessage":
             if let args = call.arguments as? [String: Any] {
                 sendMessage(args: args, result: result)
-            } else {
-                result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
-            }
-        case "sendMessageIP":
-            if let args = call.arguments as? [String: Any] {
-                sendMessageIP(args: args, result: result)
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
             }
@@ -167,16 +161,17 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
 
         // 3. 提取 SIPSDKConfig 主结构体字段
         let config = SIPSDKConfig(
-            port: UInt32(args["port"] as? Int ?? 58581),
-            publicAddr: args["publicAddr"] as? String,
             logLevel: Int32(args["logLevel"] as? Int ?? 4),
             userAgent: args["userAgent"] as? String ?? "",
             workerThreadCount: Int32(args["workerThreadCount"] as? Int ?? 1),
+            updateRoute: (args["updateRoute"] as? Bool) ?? false,
             enableVideo: (args["enableVideo"] as? Bool) ?? true,
             sdkObserver: callbacks,
             allowMultipleConnections: (args["allowMultipleConnections"] as? Bool) ?? false,
             domainNameDirectRegistrar: (args["domainNameDirectRegistrar"] as? Bool) ?? false,
             doesItSupportBroadcast: (args["doesItSupportBroadcast"] as? Bool) ?? false,
+            customSessionName: args["customSessionName"] as? String,
+            localCallUpdateTime: Int32(args["logLevel"] as? Int ?? 60),
             stunConfig: stun
         )
         let baseUrl: String = args["baseUrl"] as? String ?? ""
@@ -190,28 +185,21 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         result(nil) // 表示成功
     }
 
-    private func registrar(args: [String: Any], result: @escaping FlutterResult) {
-        var localConfig: REGLocalConfig?
-        if let localConfigDict = args["localConfig"] as? [String: Any] {
-            let username = localConfigDict["username"] as? String
-            let proxy = localConfigDict["proxy"] as? String
-            let proxyPort = UInt32(localConfigDict["proxyPort"] as? Int ?? 0)
-            let enableStreamControl = (localConfigDict["enableStreamControl"] as? Bool) ?? false
-            let streamElapsed = Int32(localConfigDict["streamElapsed"] as? Int ?? 0)
-            let startKeyframeCount = UInt32(localConfigDict["startKeyframeCount"] as? Int ?? 120)
-            let startKeyframeInterval = UInt32(localConfigDict["startKeyframeInterval"] as? Int ?? 1000)
+    private func localAccount(args: [String: Any], result _: @escaping FlutterResult) {
+        let localConfig = REGLocalConfig(
+            transport: args["transport"] as? String,
+            username: args["username"] as? String,
+            port: UInt32(args["port"] as? Int ?? 58581),
+            boundAddr: args["boundAddr"] as? String,
+            publicAddr: args["publicAddr"] as? String,
+            enableStreamControl: (args["enableStreamControl"] as? Bool) ?? false,
+            streamElapsed: Int32(args["logLevel"] as? Int ?? 0)
+        )
 
-            localConfig = REGLocalConfig(
-                username: username,
-                proxy: proxy,
-                proxyPort: proxyPort,
-                enableStreamControl: enableStreamControl,
-                streamElapsed: streamElapsed,
-                startKeyframeCount: startKeyframeCount,
-                startKeyframeInterval: startKeyframeInterval
-            )
-        }
+        SIPHandle.localAccount(localConfig: localConfig)
+    }
 
+    private func remoteAccount(args: [String: Any], result: @escaping FlutterResult) {
         var turnConfig: TURNConfig?
         if let turnConfigDict = args["turnConfig"] as? [String: Any] {
             let enable = (turnConfigDict["enable"] as? Bool) ?? false
@@ -241,8 +229,6 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         let proxyPort = UInt32(args["proxyPort"] as? Int ?? 0)
         let enableStreamControl = (args["enableStreamControl"] as? Bool) ?? false
         let streamElapsed = Int32(args["streamElapsed"] as? Int ?? 0)
-        let startKeyframeCount = UInt32(args["startKeyframeCount"] as? Int ?? 120)
-        let startKeyframeInterval = UInt32(args["startKeyframeInterval"] as? Int ?? 1000)
 
         let config = REGConfig(
             domain: domain,
@@ -256,25 +242,18 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             proxyPort: proxyPort,
             enableStreamControl: enableStreamControl,
             streamElapsed: streamElapsed,
-            startKeyframeCount: startKeyframeCount,
-            startKeyframeInterval: startKeyframeInterval,
             turnConfig: turnConfig
         )
 
-        // 这里调用你自己的注册接口，确保 localConfig 不为空时才调用
-        if let localConfig = localConfig {
-            SIPHandle.registrar(localConfig: localConfig, config: config)
-        } else {
-            print("localConfig is nil, cannot registrar")
-        }
+        SIPHandle.remoteAccount(config: config)
         result(nil) // 表示成功
     }
 
     /**
      * 解除注册到服务器
      */
-    private func unRegistrar(args _: [String: Any], result: @escaping FlutterResult) {
-        SIPHandle.unRegistrar()
+    private func delRemoteAccount(args _: [String: Any], result: @escaping FlutterResult) {
+        SIPHandle.delRemoteAccount()
         result(nil)
     }
 
@@ -303,21 +282,16 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      * headers: 自定义头信息
      */
     private func call(args: [String: Any], result: @escaping FlutterResult) {
-        let username = args["username"] as? String
-        let headers = (args["headers"] as? [String: String])?.map { ($0.key, $0.value) }
-        let callUuid: UInt64 = SIPHandle.call(username: username!, headers: headers)
-        result(String(callUuid))
-    }
+        let param = CallParam(
+            type: Int32(args["type"] as? Int32 ?? SDK_CALL_TYPE_SERVER.rawValue),
+            username: args["username"] as? String,
+            remoteIp: args["remoteIp"] as? String,
+            headers: (args["headers"] as? [String: String])?.map { ($0.key, $0.value) },
+            transmitVideo: (args["transmitVideo"] as? Bool) ?? true,
+            transmitSound: (args["transmitSound"] as? Bool) ?? true
+        )
 
-    /**
-     * 通过服IP呼叫
-     * ip: 对方IP
-     * headers: 自定义头信息
-     */
-    private func callIP(args: [String: Any], result: @escaping FlutterResult) {
-        let ip = args["ip"] as? String
-        let headers = (args["headers"] as? [String: String])?.map { ($0.key, $0.value) }
-        let callUuid: UInt64 = SIPHandle.callIP(ip: ip!, headers: headers)
+        let callUuid: UInt64 = SIPHandle.call(param: param)
         result(String(callUuid))
     }
 
@@ -356,24 +330,15 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      * content: 内容
      */
     private func sendMessage(args: [String: Any], result: @escaping FlutterResult) {
-        let username = args["username"] as? String ?? ""
-        let content = args["content"] as? String ?? ""
+        let param:MessageParam = MessageParam(
+            type: Int32(args["type"] as? Int32 ?? SDK_MESSAGE_TYPE_SERVER.rawValue),
+            content: args["content"] as? String ?? "",
+            username: args["username"] as? String,
+            remoteIp: args["remoteIp"] as? String
+        )
+        
         // 发送
-        SIPHandle.sendMessage(username: username, content: content)
-        // 成功回调
-        result(nil)
-    }
-
-    /**
-     * 通过IP发送sip message消息
-     * username: 对方账号
-     * content: 内容
-     */
-    private func sendMessageIP(args: [String: Any], result: @escaping FlutterResult) {
-        let ip = args["ip"] as? String ?? ""
-        let content = args["content"] as? String ?? ""
-        // 发送
-        SIPHandle.sendMessageIP(ip: ip, content: content)
+        SIPHandle.sendMessage(param: param)
         // 成功回调
         result(nil)
     }

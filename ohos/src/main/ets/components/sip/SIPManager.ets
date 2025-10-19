@@ -104,8 +104,11 @@ export class SIPManager {
     SIPHandle.init(context!, baseUrl, clientId, clientSecret, config, mediaConfig);
   }
 
-  static registrar(localConfig: SIPLocalConfig, registrarConfig: SIPRegistrarConfig) {
+  static localAccount(localConfig: SIPLocalConfig) {
     SIPHandle.localAccount(localConfig);
+  }
+
+  static registrar(registrarConfig: SIPRegistrarConfig) {
     SIPHandle.remotelAccount(registrarConfig);
   }
 

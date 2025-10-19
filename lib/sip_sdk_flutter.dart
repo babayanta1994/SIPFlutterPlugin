@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:sip_sdk_flutter/entitys/sip_sdk_local_config.dart';
 import 'package:sip_sdk_flutter/sip_sdk_callbacks.dart';
 
 import 'entitys/sip_sdk_camera_config.dart';
@@ -16,12 +17,16 @@ class SipSdkFlutter {
     return SipSdkFlutterPlatform.instance.initSDK(config);
   }
 
-  Future<Void?> registrar(SIPSDKRegistrarConfig config) {
-    return SipSdkFlutterPlatform.instance.registrar(config);
+  Future<Void?> localAccount(SIPSDKLocalConfig config) {
+    return SipSdkFlutterPlatform.instance.localAccount(config);
   }
 
-  Future<void> unRegistrar() {
-    return SipSdkFlutterPlatform.instance.unRegistrar();
+  Future<Void?> remoteAccount(SIPSDKRegistrarConfig config) {
+    return SipSdkFlutterPlatform.instance.remoteAccount(config);
+  }
+
+  Future<void> delRemoteAccount() {
+    return SipSdkFlutterPlatform.instance.delRemoteAccount();
   }
 
   Future<void> cameraOpen(SIPSDKCameraConfig config) {
@@ -32,12 +37,22 @@ class SipSdkFlutter {
     return SipSdkFlutterPlatform.instance.cameraClose();
   }
 
-  Future<String?> call(String username, Map<String, String> headers) {
-    return SipSdkFlutterPlatform.instance.call(username, headers);
-  }
-
-  Future<String?> callIP(String ip, Map<String, String> headers) {
-    return SipSdkFlutterPlatform.instance.callIP(ip, headers);
+  Future<String?> call(
+    int type, {
+    String? username,
+    String? remoteIp,
+    bool? transmitVideo,
+    bool? transmitSound,
+    Map<String, String>? headers,
+  }) {
+    return SipSdkFlutterPlatform.instance.call(
+      type,
+      username: username,
+      remoteIp: remoteIp,
+      transmitVideo: transmitVideo,
+      transmitSound: transmitSound,
+      headers: headers,
+    );
   }
 
   Future<void> answer(int code, [String? callUUID]) {
@@ -48,12 +63,18 @@ class SipSdkFlutter {
     return SipSdkFlutterPlatform.instance.sendDtmfInfo(type, content, callUUID);
   }
 
-  Future<void> sendMessage(String username, String content) {
-    return SipSdkFlutterPlatform.instance.sendMessage(username, content);
-  }
-
-  Future<void> sendMessageIP(String ip, String content) {
-    return SipSdkFlutterPlatform.instance.sendMessageIP(ip, content);
+  Future<void> sendMessage(
+    int type,
+    String content, {
+    String? username,
+    String? remoteIp,
+  }) {
+    return SipSdkFlutterPlatform.instance.sendMessage(
+      type,
+      content,
+      username: username,
+      remoteIp: remoteIp,
+    );
   }
 
   Future<void> hangup(int code, [String? callUUID]) {

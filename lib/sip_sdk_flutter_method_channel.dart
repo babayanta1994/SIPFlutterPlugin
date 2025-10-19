@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_local_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_message.dart';
 import 'package:sip_sdk_flutter/sip_sdk_callbacks.dart';
 
@@ -95,13 +96,20 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
-  Future<Void?> registrar(SIPSDKRegistrarConfig config) async {
-    return await methodChannel.invokeMethod<Void>('registrar', config.toJson());
+  Future<Void?> localAccount(SIPSDKLocalConfig config) async {
+    return await methodChannel.invokeMethod<Void>(
+        'localAccount', config.toJson());
   }
 
   @override
-  Future<void> unRegistrar() async {
-    return await methodChannel.invokeMethod<void>('unRegistrar');
+  Future<Void?> remoteAccount(SIPSDKRegistrarConfig config) async {
+    return await methodChannel.invokeMethod<Void>(
+        'remoteAccount', config.toJson());
+  }
+
+  @override
+  Future<void> delRemoteAccount() async {
+    return await methodChannel.invokeMethod<void>('delRemoteAccount');
   }
 
   @override
@@ -117,19 +125,19 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
 
   @override
   Future<String?> call(
-    String username,
-    Map<String, String> headers,
-  ) async {
+    int type, {
+    String? username,
+    String? remoteIp,
+    bool? transmitVideo,
+    bool? transmitSound,
+    Map<String, String>? headers,
+  }) async {
     return await methodChannel.invokeMethod<String>('call', {
+      'type': type,
       'username': username,
-      'headers': headers,
-    });
-  }
-
-  @override
-  Future<String?> callIP(String ip, Map<String, String> headers) async {
-    return await methodChannel.invokeMethod<String>('callIP', {
-      'ip': ip,
+      'remoteIp': remoteIp,
+      'transmitVideo': transmitVideo,
+      'transmitSound': transmitSound,
       'headers': headers,
     });
   }
@@ -152,17 +160,16 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
-  Future<void> sendMessage(String username, String content) async {
+  Future<void> sendMessage(
+    int type,
+    String content, {
+    String? username,
+    String? remoteIp,
+  }) async {
     return await methodChannel.invokeMethod<void>('sendMessage', {
+      'type': type,
       'username': username,
-      'content': content,
-    });
-  }
-
-  @override
-  Future<void> sendMessageIP(String ip, String content) async {
-    return await methodChannel.invokeMethod<void>('sendMessageIP', {
-      'ip': ip,
+      'remoteIp': remoteIp,
       'content': content,
     });
   }

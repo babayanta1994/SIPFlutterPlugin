@@ -15,10 +15,13 @@ import com.sip.flutter.sip_sdk_flutter.utils.audio.AudioHandle;
 import com.sip.flutter.sip_sdk_flutter.utils.camera.CameraHandle;
 import com.sip.flutter.sip_sdk_flutter.view.VideoComponentFactory;
 import com.sip.sdk.SIPSDK;
+import com.sip.sdk.entity.SIPSDKCallParam;
 import com.sip.sdk.entity.SIPSDKConfig;
+import com.sip.sdk.entity.SIPSDKDtmfInfoParam;
 import com.sip.sdk.entity.SIPSDKLocalConfig;
 import com.sip.sdk.entity.SIPSDKMediaConfig;
 import com.sip.sdk.entity.SIPSDKMediaH264Fmtp;
+import com.sip.sdk.entity.SIPSDKMessageParam;
 import com.sip.sdk.entity.SIPSDKRegistrarConfig;
 import com.sip.sdk.entity.SIPSDKStunConfig;
 import com.sip.sdk.entity.SIPSDKTurnConfig;
@@ -94,26 +97,24 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("initSDK")) {
             initSDK(call.arguments(), result);
-        } else if (call.method.equals("registrar")) {
-            registrar(call.arguments(), result);
-        } else if (call.method.equals("unRegistrar")) {
-            unRegistrar(call.arguments(), result);
+        } else if (call.method.equals("localAccount")) {
+            this.localAccount(call.arguments(), result);
+        } else if (call.method.equals("remoteAccount")) {
+            this.remoteAccount(call.arguments(), result);
+        } else if (call.method.equals("delRemoteAccount")) {
+            this.delRemoteAccount(call.arguments(), result);
         } else if (call.method.equals("cameraOpen")) {
             cameraOpen(call.arguments(), result);
         } else if (call.method.equals("cameraClose")) {
             cameraClose(call.arguments(), result);
         } else if (call.method.equals("call")) {
             call(call.arguments(), result);
-        } else if (call.method.equals("callIP")) {
-            callIP(call.arguments(), result);
         } else if (call.method.equals("answer")) {
             answer(call.arguments(), result);
         } else if (call.method.equals("sendDtmfInfo")) {
             sendDtmfInfo(call.arguments(), result);
         } else if (call.method.equals("sendMessage")) {
             sendMessage(call.arguments(), result);
-        } else if (call.method.equals("sendMessageIP")) {
-            sendMessageIP(call.arguments(), result);
         } else if (call.method.equals("hangup")) {
             hangup(call.arguments(), result);
         } else if (call.method.equals("dump")) {
@@ -229,15 +230,17 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         }
 
         SIPSDKConfig config = new SIPSDKConfig();
-        config.port = MapUtils.get(args, "port", 58581);
         config.logLevel = MapUtils.get(args, "logLevel", 4);
         config.userAgent = MapUtils.get(args, "userAgent", "");
         config.workerThreadCount = MapUtils.get(args, "workerThreadCount", 1);
+        config.updateRoute = MapUtils.get(args, "updateRoute", false);
         config.videoEnable = MapUtils.get(args, "enableVideo", true);
         config.videoOutAutoTransmit = MapUtils.get(args, "videoOutAutoTransmit", true);
         config.allowMultipleConnections = MapUtils.get(args, "allowMultipleConnections", false);
         config.domainNameDirectRegistrar = MapUtils.get(args, "domainNameDirectRegistrar", false);
         config.doesItSupportBroadcast = MapUtils.get(args, "doesItSupportBroadcast", false);
+        config.customSessionName = MapUtils.get(args, "customSessionName", null);
+        config.localCallUpdateTime = MapUtils.get(args, "localCallUpdateTime", 60);
         config.stunConfig = stunConfig;
         String baseUrl = MapUtils.get(args, "baseUrl", "");
         String clientId = MapUtils.get(args, "clientId", "");
@@ -246,20 +249,21 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         result.success(null);
     }
 
-    private void registrar(Map<String, Object> args, MethodChannel.Result result) {
-        Map<String, Object> localDict = MapUtils.getMap(args, "localConfig");
-        SIPSDKLocalConfig localConfig = null;
-        if (localDict != null) {
-            localConfig = new SIPSDKLocalConfig();
-            localConfig.username = MapUtils.get(localDict, "username", null);
-            localConfig.proxy = MapUtils.get(localDict, "proxy", null);
-            localConfig.proxyPort = MapUtils.get(localDict, "proxyPort", 0);
-            localConfig.enableStreamControl = MapUtils.get(localDict, "enableStreamControl", false);
-            localConfig.streamElapsed = MapUtils.get(localDict, "streamElapsed", 0);
-            localConfig.startKeyframeCount = MapUtils.get(localDict, "startKeyframeCount", 120);
-            localConfig.startKeyframeInterval = MapUtils.get(localDict, "startKeyframeInterval", 1000);
-        }
+    private void localAccount(Map<String, Object> args, MethodChannel.Result result) {
+        SIPSDKLocalConfig localConfig = new SIPSDKLocalConfig();
+        localConfig.transport = MapUtils.get(args, "transport", null);
+        localConfig.port = MapUtils.get(args, "port", 5060);
+        localConfig.username = MapUtils.get(args, "username", null);
+        localConfig.boundAddr = MapUtils.get(args, "boundAddr", null);
+        localConfig.publicAddr = MapUtils.get(args, "publicAddr", null);
+        localConfig.enableStreamControl = MapUtils.get(args, "enableStreamControl", false);
+        localConfig.streamElapsed = MapUtils.get(args, "streamElapsed", 0);
 
+        SIPSDK.localAccount(localConfig);
+        result.success(null);
+    }
+
+    private void remoteAccount(Map<String, Object> args, MethodChannel.Result result) {
         Map<String, Object> turnDict = MapUtils.getMap(args, "turnConfig");
         SIPSDKTurnConfig turnConfig = null;
         if (turnDict != null) {
@@ -297,15 +301,15 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         config.headers = headers;
         config.turnConfig = turnConfig;
 
-        SIPSDK.registrarAccount(config);
+        SIPSDK.remoteAccount(config);
         result.success(null);
     }
 
     /**
      * 解除注册到服务器
      */
-    private void unRegistrar(Map<String, Object> args, MethodChannel.Result result) {
-        SIPSDK.unRegistrar();
+    private void delRemoteAccount(Map<String, Object> args, MethodChannel.Result result) {
+        SIPSDK.delRemoteAccount();
         result.success(null);
     }
 
@@ -329,7 +333,11 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
     }
 
     private void call(Map<String, Object> args, MethodChannel.Result result) {
+        int type = MapUtils.get(args, "type", 2);
         String username = MapUtils.get(args, "username", null);
+        String remoteIp = MapUtils.get(args, "remoteIp", null);
+        boolean transmitVideo = MapUtils.get(args, "transmitVideo", true);
+        boolean transmitSound = MapUtils.get(args, "transmitSound", true);
         Map<String, String> headers = new HashMap<>();
         Map<String, Object> rawHeaders = MapUtils.getMap(args, "headers");
         if (rawHeaders != null) {
@@ -339,27 +347,19 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
                 }
             }
         }
-        long uuid = SIPSDK.call(username, headers);
-        result.success(String.valueOf(uuid));
-    }
-
-    private void callIP(Map<String, Object> args, MethodChannel.Result result) {
-        String ip = MapUtils.get(args, "ip", null);
-        Map<String, String> headers = new HashMap<>();
-        Map<String, Object> rawHeaders = MapUtils.getMap(args, "headers");
-        if (rawHeaders != null) {
-            for (Map.Entry<String, Object> entry : rawHeaders.entrySet()) {
-                if (entry.getValue() instanceof String) {
-                    headers.put(entry.getKey(), (String) entry.getValue());
-                }
-            }
-        }
-        long uuid = SIPSDK.callIP(ip, headers);
+        SIPSDKCallParam param = new SIPSDKCallParam();
+        param.callType = type;
+        param.username = username;
+        param.remoteIp = remoteIp;
+        param.transmitVideo = transmitVideo;
+        param.transmitSound = transmitSound;
+        param.headers = headers;
+        long uuid = SIPSDK.call(param);
         result.success(String.valueOf(uuid));
     }
 
     private void answer(Map<String, Object> args, MethodChannel.Result result) {
-        int code = MapUtils.get(args, "200", 200);
+        int code = MapUtils.get(args, "code", 200);
         long callUUID = MapUtils.get(args, "callUUID", 0);
         SIPSDK.answer(code, callUUID);
         result.success(null);
@@ -370,21 +370,28 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         int dtmfInfoType = MapUtils.get(args, "dtmfInfoType", SDK_DTMF_INFO_TYPE);
         String content = MapUtils.get(args, "content", null);
         String contentType = MapUtils.get(args, "contentType", null);
-        SIPSDK.sendDtmfInfo(dtmfInfoType, contentType, content);
+        SIPSDKDtmfInfoParam param = new SIPSDKDtmfInfoParam();
+        param.callUuid = callUUID;
+        param.dtmfInfoType = dtmfInfoType;
+        param.content = content;
+        param.contentType = contentType;
+        SIPSDK.sendDtmfInfo(param);
         result.success(null);
     }
 
     private void sendMessage(Map<String, Object> args, MethodChannel.Result result) {
+        int type = MapUtils.get(args, "type", 2);
         String username = MapUtils.get(args, "username", null);
+        String remoteIp = MapUtils.get(args, "remoteIp", null);
         String content = MapUtils.get(args, "content", null);
-        SIPSDK.sendMessage(username, content);
-        result.success(null);
-    }
 
-    private void sendMessageIP(Map<String, Object> args, MethodChannel.Result result) {
-        String ip = MapUtils.get(args, "ip", null);
-        String content = MapUtils.get(args, "content", null);
-        SIPSDK.sendMessageIP(ip, content);
+        SIPSDKMessageParam param = new SIPSDKMessageParam();
+        param.messageType = type;
+        param.username = username;
+        param.remoteIp = remoteIp;
+        param.content = content;
+
+        SIPSDK.sendMessage(param);
         result.success(null);
     }
 

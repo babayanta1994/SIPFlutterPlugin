@@ -16,7 +16,6 @@ class SIPSDKRegistrarConfig {
   final int startKeyframeCount;
   final int startKeyframeInterval;
   final SIPSDKTURNConfig? turnConfig;
-  final SIPSDKLocalConfig? localConfig;
 
   SIPSDKRegistrarConfig({
     this.domain,
@@ -33,24 +32,22 @@ class SIPSDKRegistrarConfig {
     this.startKeyframeCount = 120,
     this.startKeyframeInterval = 1000,
     this.turnConfig,
-    this.localConfig,
   });
 
   Map<String, dynamic> toJson() => {
-    'domain': domain,
-    'username': username,
-    'password': password,
-    'transport': transport,
-    'serverAddr': serverAddr,
-    'serverPort': serverPort,
-    'headers': headers,
-    'proxy': proxy,
-    'proxyPort': proxyPort,
-    'enableStreamControl': enableStreamControl,
-    'streamElapsed': streamElapsed,
-    'startKeyframeCount': startKeyframeCount,
-    'startKeyframeInterval': startKeyframeInterval,
-    'turnConfig': turnConfig?.toJson(),
-    'localConfig': localConfig?.toJson(),
-  };
+        'domain': domain,
+        'username': username,
+        'password': password,
+        'transport': transport,
+        'serverAddr': serverAddr,
+        'serverPort': serverPort,
+        'headers': headers,
+        'proxy': proxy,
+        'proxyPort': proxyPort,
+        'enableStreamControl': enableStreamControl,
+        'streamElapsed': streamElapsed,
+        'startKeyframeCount': startKeyframeCount,
+        'startKeyframeInterval': startKeyframeInterval,
+        'turnConfig': turnConfig?.toJson(),
+      };
 }

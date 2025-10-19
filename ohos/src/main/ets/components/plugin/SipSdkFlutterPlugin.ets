@@ -63,26 +63,24 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     if (call.method === "initSDK") {
       this.initSDK(call, result);
       result.success(null);
-    } else if (call.method === "registrar") {
-      this.registrar(call, result);
-    } else if (call.method == "unRegistrar") {
-      this.unRegistrar(call, result);
+    } else if (call.method === "localAccount") {
+      this.localAccount(call, result);
+    } else if (call.method === "remoteAccount") {
+      this.remoteAccount(call, result);
+    } else if (call.method == "delRemoteAccount") {
+      this.delRemoteAccount(call, result);
     } else if (call.method == "cameraOpen") {
       this.cameraOpen(call, result);
     } else if (call.method == "cameraClose") {
       this.cameraClose(call, result);
     } else if (call.method == "call") {
       this.call(call, result);
-    } else if (call.method == "callIP") {
-      this.callIP(call, result);
     } else if (call.method == "answer") {
       this.answer(call, result);
     } else if (call.method == "sendDtmfInfo") {
       this.sendDtmfInfo(call, result);
     } else if (call.method == "sendMessage") {
       this.sendMessage(call, result);
-    } else if (call.method == "sendMessageIP") {
-      this.sendMessageIP(call, result);
     } else if (call.method == "hangup") {
       this.hangup(call, result);
     } else if (call.method == "dump") {
@@ -109,19 +107,18 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     let clientId: string = call.argument("clientId");
     let clientSecret: string = call.argument("clientSecret");
     //基础配置
-
-    let port: number = call.argument("port");
-    let publicAddr: string = call.argument("publicAddr");
     let logLevel: number = call.argument("logLevel");
-
 
     let userAgent: string = call.argument("userAgent");
     let workerThreadCount: number = call.argument("workerThreadCount");
+    let updateRoute: boolean = call.argument("updateRoute");
     let enableVideo: boolean = call.argument("enableVideo");
     let videoOutAutoTransmit: boolean = call.argument("videoOutAutoTransmit");
     let allowMultipleConnections: boolean = call.argument("allowMultipleConnections");
     let domainNameDirectRegistrar: boolean = call.argument("domainNameDirectRegistrar");
     let doesItSupportBroadcast: boolean = call.argument("doesItSupportBroadcast");
+    let customSessionName: string = call.argument("customSessionName");
+    let localCallUpdateTime: number = call.argument("localCallUpdateTime");
     //stun 配置
     let stunConfig: Map<Any, Any> = call.argument("stunConfig");
     this.printDetails("stunConfig", stunConfig);
@@ -143,23 +140,25 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     this.printDetails("encodeConfig", encodeConfig);
 
     SIPManager.init(baseUrl, clientId, clientSecret, {
-      port: port,
       logLevel: logLevel,
       userAgent: userAgent,
-      publicAddr: publicAddr,
       videoEnable: enableVideo,
       workerThreadCount: workerThreadCount,
+      updateRoute: updateRoute,
       transportStunServer: false,
       videoOutAutoTransmit: videoOutAutoTransmit,
       doesItSupportBroadcast: doesItSupportBroadcast,
       allowMultipleConnections: allowMultipleConnections,
       domainNameDirectRegistrar: domainNameDirectRegistrar,
+      customSessionName: customSessionName,
+      localCallUpdateTime: localCallUpdateTime,
       sipSdkStunConfig: stunConfig ? {
         count: (stunConfig.get("servers") as string[]).length,
         servers: stunConfig.get("servers"),
         enableIpv6: stunConfig.get("enableIpv6"),
       } : undefined,
     }, mediaConfig ? {
+      audioOnlyCallConfirmed: mediaConfig.get("audioOnlyCallConfirmed"),
       audioClockRate: mediaConfig.get("audioClockRate"),
       micGain: mediaConfig.get("micGain"),
       speakerGain: mediaConfig.get("speakerGain"),
@@ -193,7 +192,20 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     result.success(null);
   }
 
-  registrar(call: MethodCall, result: MethodResult) {
+  localAccount(call: MethodCall, result: MethodResult) {
+    SIPManager.localAccount({
+      transport: call.argument("transport"),
+      port: call.argument("port"),
+      username: call.argument("username"),
+      bound_addr: call.argument("boundAddr"),
+      public_addr: call.argument("publicAddr"),
+      enableStreamControl: call.argument("enableStreamControl"),
+      streamElapsed: call.argument("streamElapsed"),
+    });
+    result.success(null);
+  }
+
+  remoteAccount(call: MethodCall, result: MethodResult) {
     this.printDetails("registrar", call.args);
     let domain: string = call.argument("domain");
     let username: string = call.argument("username");
@@ -213,19 +225,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     let turnConfig: Map<Any, Any> = call.argument("turnConfig");
     this.printDetails("turnConfig", turnConfig);
 
-    //Local Config
-    let localConfig: Map<Any, Any> = call.argument("localConfig");
-    this.printDetails("localConfig", localConfig);
-
     SIPManager.registrar({
-      username: localConfig.get("username"),
-      proxy: localConfig.get("proxy"),
-      proxyPort: localConfig.get("proxyPort"),
-      enableStreamControl: localConfig.get("enableStreamControl"),
-      streamElapsed: localConfig.get("streamElapsed"),
-      startKeyframeCount: localConfig.get("startKeyframeCount"),
-      startKeyframeInterval: localConfig.get("startKeyframeInterval"),
-    }, {
       domain: domain,
       username: username,
       password: password,
@@ -250,7 +250,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     result.success(null);
   }
 
-  unRegistrar(call: MethodCall, result: MethodResult) {
+  delRemoteAccount(call: MethodCall, result: MethodResult) {
     this.printDetails("unRegistrar", call.args);
     SIPManager.unRegistrar();
     result.success(null);
@@ -275,24 +275,19 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
 
   async call(call: MethodCall, result: MethodResult) {
     this.printDetails("call", call.args);
+    let type: number = call.argument("type");
     let username: string = call.argument("username");
-    let headers: Map<string, string> = call.argument("headers");
-    let callUuid = await SIPManager.makeCall({
-      callType: 1,
-      username: username,
-      headers: headers ? this.mapToRecord(headers) : {},
-    });
-    result.success(callUuid.toString());
-  }
-
-  async callIP(call: MethodCall, result: MethodResult) {
-    this.printDetails("call", call.args);
     let remoteIp: string = call.argument("remoteIp");
+    let transmitVideo: boolean = call.argument("transmitVideo") ?? true;
+    let transmitSound: boolean = call.argument("transmitSound") ?? true;
     let headers: Map<string, string> = call.argument("headers");
     let callUuid = await SIPManager.makeCall({
-      callType: 0,
+      callType: type,
+      username: username,
       remoteIp: remoteIp,
       headers: headers ? this.mapToRecord(headers) : {},
+      transmitVideo: transmitVideo,
+      transmitSound: transmitSound,
     });
     result.success(callUuid.toString());
   }
@@ -329,18 +324,10 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
 
   async sendMessage(call: MethodCall, result: MethodResult) {
     this.printDetails("sendMessage", call.args);
+    let type: number = call.argument("type");
     SIPManager.sendMessage({
-      messageType: 1,
+      messageType: type,
       username: call.argument("username"),
-      content: call.argument("content"),
-    });
-    result.success(null);
-  }
-
-  async sendMessageIP(call: MethodCall, result: MethodResult) {
-    this.printDetails("sendMessage", call.args);
-    SIPManager.sendMessage({
-      messageType: 0,
       remoteIp: call.argument("remoteIp"),
       content: call.argument("content"),
     });

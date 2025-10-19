@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_call_param.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_camera_config.dart';
@@ -92,12 +91,39 @@ class SIPManage implements SIPSDKCallbacks {
     _sipSdkFlutterPlugin.initSDK(config);
   }
 
-  static void registrar() async {
-    Map<String, dynamic>? sconfig = await ConfigStorage.load(ConfigStorage.sip_config);
+  static void localAccount() async {
+    Map<String, dynamic>? sconfig =
+        await ConfigStorage.load(ConfigStorage.sip_config);
     if (sconfig == null) {
       return;
     }
-    Map<String, dynamic>? tconfig = await ConfigStorage.load(ConfigStorage.turn_config);
+    SIPSDKLocalConfig configUdp = SIPSDKLocalConfig(
+      transport: "udp",
+      username: sconfig["username"] as String,
+      port: 58581,
+      enableStreamControl: false,
+      streamElapsed: 0,
+    );
+    _sipSdkFlutterPlugin.localAccount(configUdp);
+    SIPSDKLocalConfig configTcp = SIPSDKLocalConfig(
+      transport: "tcp",
+      username: sconfig["username"] as String,
+      port: 58581,
+      enableStreamControl: false,
+      streamElapsed: 0,
+    );
+    _sipSdkFlutterPlugin.localAccount(configTcp);
+  }
+
+  static void remoteAccount() async {
+    Map<String, dynamic>? sconfig =
+        await ConfigStorage.load(ConfigStorage.sip_config);
+    if (sconfig == null) {
+      return;
+    }
+    localAccount();
+    Map<String, dynamic>? tconfig =
+        await ConfigStorage.load(ConfigStorage.turn_config);
     SIPSDKTURNConfig? turnConfig;
     if (tconfig != null && (tconfig["enable"] as bool)) {
       turnConfig = SIPSDKTURNConfig(
@@ -123,19 +149,12 @@ class SIPManage implements SIPSDKCallbacks {
       startKeyframeInterval: 1000,
       headers: {"test": "11ddd"},
       turnConfig: turnConfig,
-      localConfig: SIPSDKLocalConfig(
-        username: sconfig["username"] as String,
-        enableStreamControl: false,
-        streamElapsed: 0,
-        startKeyframeCount: 120,
-        startKeyframeInterval: 1000,
-      ),
     );
-    _sipSdkFlutterPlugin.registrar(config);
+    _sipSdkFlutterPlugin.remoteAccount(config);
   }
 
-  void unRegistrar() {
-    _sipSdkFlutterPlugin.unRegistrar();
+  void delRemoteAccount() {
+    _sipSdkFlutterPlugin.delRemoteAccount();
   }
 
   Future<void> cameraOpen(SIPSDKCameraConfig config) async {
@@ -146,12 +165,22 @@ class SIPManage implements SIPSDKCallbacks {
     _sipSdkFlutterPlugin.cameraClose();
   }
 
-  Future<String?> call(String username, Map<String, String> headers) {
-    return _sipSdkFlutterPlugin.call(username, headers);
-  }
-
-  Future<String?> callIP(String ip, Map<String, String> headers) {
-    return _sipSdkFlutterPlugin.callIP(ip, headers);
+  Future<String?> call(
+    int type, {
+    String? username,
+    String? remoteIp,
+    bool? transmitVideo,
+    bool? transmitSound,
+    Map<String, String>? headers,
+  }) {
+    return _sipSdkFlutterPlugin.call(
+      type,
+      username: username,
+      remoteIp: remoteIp,
+      transmitVideo: transmitVideo,
+      transmitSound: transmitSound,
+      headers: headers,
+    );
   }
 
   // 通常情况不用调用接听，因为被叫界面是原生代码
@@ -169,12 +198,18 @@ class SIPManage implements SIPSDKCallbacks {
     _sipSdkFlutterPlugin.hangup(code, callUUID);
   }
 
-  void sendMessage(String username, String content) {
-    _sipSdkFlutterPlugin.sendMessage(username, content);
-  }
-
-  void sendMessageIP(String username, String content) {
-    _sipSdkFlutterPlugin.sendMessageIP(username, content);
+  void sendMessage(
+    int type,
+    String content, {
+    String? username,
+    String? remoteIp,
+  }) {
+    _sipSdkFlutterPlugin.sendMessage(
+      type,
+      content,
+      username: username,
+      remoteIp: remoteIp,
+    );
   }
 
   // 通常情况不用调用dump，这个主要用于调试

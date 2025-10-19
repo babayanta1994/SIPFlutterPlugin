@@ -4,6 +4,7 @@ import 'package:sip_sdk_flutter/entitys/sip_sdk_video_encode_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_encode_rc_modes.dart';
 
 class SIPSDKMediaConfig {
+  final bool? audioOnlyCallConfirmed;
   final int? audioClockRate;
   final double? micGain;
   final double? speakerGain;
@@ -17,6 +18,7 @@ class SIPSDKMediaConfig {
 
   // 在这里提供默认值
   SIPSDKMediaConfig({
+    this.audioOnlyCallConfirmed = false,
     this.audioClockRate = 16000,
     this.micGain = 1.0,
     this.speakerGain = 1.0,
@@ -55,6 +57,7 @@ class SIPSDKMediaConfig {
 
   // 将对象转换为 JSON 格式
   Map<String, Object?> toJson() => {
+        'audioOnlyCallConfirmed': audioOnlyCallConfirmed,
         'audioClockRate': audioClockRate,
         'micGain': micGain,
         'speakerGain': speakerGain,
@@ -70,6 +73,7 @@ class SIPSDKMediaConfig {
   // 从 JSON 构造对象
   factory SIPSDKMediaConfig.fromJson(Map<String, dynamic> json) {
     return SIPSDKMediaConfig(
+      audioOnlyCallConfirmed: json['audioOnlyCallConfirmed'] as bool?,
       audioClockRate: json['audioClockRate'] as int?,
       micGain: json['micGain'] as double?,
       speakerGain: json['speakerGain'] as double?,

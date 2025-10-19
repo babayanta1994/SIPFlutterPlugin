@@ -154,7 +154,7 @@ class _MainPageState extends State<MainPage> {
     // 保存配置
     ConfigStorage.save(ConfigStorage.sip_config, config);
     // 这里调用 SIP SDK 注册方法
-    SIPManage.registrar();
+    SIPManage.remoteAccount();
   }
 
   void call() {

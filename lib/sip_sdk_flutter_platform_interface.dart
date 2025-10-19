@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_local_config.dart';
 
 import 'entitys/sip_sdk_camera_config.dart';
 import 'entitys/sip_sdk_config.dart';
@@ -37,12 +38,16 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('initSDK() has not been implemented.');
   }
 
-  Future<Void?> registrar(SIPSDKRegistrarConfig config) {
-    throw UnimplementedError('registrar() has not been implemented.');
+  Future<Void?> localAccount(SIPSDKLocalConfig config) {
+    throw UnimplementedError('localAccount() has not been implemented.');
   }
 
-  Future<void> unRegistrar() {
-    throw UnimplementedError('unRegistrar() has not been implemented.');
+  Future<Void?> remoteAccount(SIPSDKRegistrarConfig config) {
+    throw UnimplementedError('remoteAccount() has not been implemented.');
+  }
+
+  Future<void> delRemoteAccount() {
+    throw UnimplementedError('delRemoteAccount() has not been implemented.');
   }
 
   Future<void> cameraOpen(SIPSDKCameraConfig config) {
@@ -53,12 +58,15 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('cameraClose() has not been implemented.');
   }
 
-  Future<String?> call(String username, Map<String, String> headers) {
+  Future<String?> call(
+    int type, {
+    String? username,
+    String? remoteIp,
+    bool? transmitVideo,
+    bool? transmitSound,
+    Map<String, String>? headers,
+  }) {
     throw UnimplementedError('call() has not been implemented.');
-  }
-
-  Future<String?> callIP(String ip, Map<String, String> headers) {
-    throw UnimplementedError('callIP() has not been implemented.');
   }
 
   Future<void> answer(int code, [String? callUUID]) {
@@ -69,12 +77,13 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('sendDtmfInfo() has not been implemented.');
   }
 
-  Future<void> sendMessage(String username, String content) {
+  Future<void> sendMessage(
+    int type,
+    String content, {
+    String? username,
+    String? remoteIp,
+  }) {
     throw UnimplementedError('sendMessage() has not been implemented.');
-  }
-
-  Future<void> sendMessageIP(String ip, String content) {
-    throw UnimplementedError('sendMessageIP() has not been implemented.');
   }
 
   Future<void> hangup(int code, [String? callUUID]) {
