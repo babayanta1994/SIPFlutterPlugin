@@ -9,11 +9,13 @@ class SIPSDKConstants {
 
   // 呼叫类型
   static const int SDK_CALL_TYPE_IP = 0;
-  static const int SDK_CALL_TYPE_SERVER = 1;
+  static const int SDK_CALL_TYPE_IP_TCP = SDK_CALL_TYPE_IP + 1;
+  static const int SDK_CALL_TYPE_SERVER = SDK_CALL_TYPE_IP_TCP + 1;
 
   // 消息类型
   static const int SDK_MESSAGE_TYPE_IP = 0;
-  static const int SDK_MESSAGE_TYPE_SERVER = 1;
+  static const int SDK_MESSAGE_TYPE_IP_TCP = SDK_MESSAGE_TYPE_IP + 1;
+  static const int SDK_MESSAGE_TYPE_SERVER = SDK_MESSAGE_TYPE_IP_TCP + 1;
 
   // DTMF info类型
   static const int SDK_DTMF_INFO_TYPE = 0;

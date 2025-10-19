@@ -110,13 +110,15 @@ class _CallPageState extends State<CallPage> {
       // 主动呼叫
       if (widget.callType == SIPSDKConstants.SDK_CALL_TYPE_SERVER) {
         SIPManage()
-            .call(2, username: widget.username!, headers: widget.headers ?? {})
+            .call(SIPSDKConstants.SDK_CALL_TYPE_SERVER,
+                username: widget.username!, headers: widget.headers ?? {})
             .then((value) {
           callUUID = value!;
         });
       } else {
         SIPManage()
-            .call(0, remoteIp: widget.remoteIp!, headers: widget.headers ?? {})
+            .call(SIPSDKConstants.SDK_CALL_TYPE_IP,
+                remoteIp: widget.remoteIp!, headers: widget.headers ?? {})
             .then((value) {
           callUUID = value!;
         });
@@ -346,13 +348,13 @@ class _CallPageState extends State<CallPage> {
                         if (widget.callType ==
                             SIPSDKConstants.SDK_CALL_TYPE_IP) {
                           SIPManage().sendMessage(
-                            0,
+                            SIPSDKConstants.SDK_CALL_TYPE_IP,
                             "unlock",
                             remoteIp: widget.remoteIp!,
                           );
                         } else {
                           SIPManage().sendMessage(
-                            2,
+                            SIPSDKConstants.SDK_MESSAGE_TYPE_SERVER,
                             "unlock",
                             username: widget.username!,
                           );
