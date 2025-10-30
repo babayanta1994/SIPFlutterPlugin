@@ -13,8 +13,6 @@ class SIPSDKRegistrarConfig {
   final int proxyPort;
   final bool enableStreamControl;
   final int streamElapsed;
-  final int startKeyframeCount;
-  final int startKeyframeInterval;
   final SIPSDKTURNConfig? turnConfig;
 
   SIPSDKRegistrarConfig({
@@ -29,8 +27,6 @@ class SIPSDKRegistrarConfig {
     this.proxyPort = 0,
     this.enableStreamControl = false,
     this.streamElapsed = 2,
-    this.startKeyframeCount = 120,
-    this.startKeyframeInterval = 1000,
     this.turnConfig,
   });
 
@@ -46,8 +42,6 @@ class SIPSDKRegistrarConfig {
         'proxyPort': proxyPort,
         'enableStreamControl': enableStreamControl,
         'streamElapsed': streamElapsed,
-        'startKeyframeCount': startKeyframeCount,
-        'startKeyframeInterval': startKeyframeInterval,
         'turnConfig': turnConfig?.toJson(),
       };
 }

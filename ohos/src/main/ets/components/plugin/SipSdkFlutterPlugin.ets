@@ -218,8 +218,6 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     let proxyPort: number = call.argument("proxyPort");
     let enableStreamControl: boolean = call.argument("enableStreamControl");
     let streamElapsed: number = call.argument("streamElapsed");
-    let startKeyframeCount: number = call.argument("startKeyframeCount");
-    let startKeyframeInterval: number = call.argument("startKeyframeInterval");
 
     // Turn Config
     let turnConfig: Map<Any, Any> = call.argument("turnConfig");
@@ -237,8 +235,6 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
       proxyPort: proxyPort,
       enableStreamControl: enableStreamControl,
       streamElapsed: streamElapsed,
-      startKeyframeCount: startKeyframeCount,
-      startKeyframeInterval: startKeyframeInterval,
       turnConfig: turnConfig ? {
         enable: turnConfig.get("enable"),
         server: turnConfig.get("server"),

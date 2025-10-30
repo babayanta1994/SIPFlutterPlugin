@@ -145,8 +145,6 @@ class SIPManage implements SIPSDKCallbacks {
       proxyPort: sconfig["proxyPort"] as int,
       enableStreamControl: false,
       streamElapsed: 0,
-      startKeyframeCount: 120,
-      startKeyframeInterval: 1000,
       headers: {"test": "11ddd"},
       turnConfig: turnConfig,
     );

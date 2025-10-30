@@ -296,8 +296,6 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         config.proxyPort = MapUtils.get(args, "proxyPort", 5060);
         config.enableStreamControl = MapUtils.get(args, "enableStreamControl", false);
         config.streamElapsed = MapUtils.get(args, "streamElapsed", 0);
-        config.startKeyframeCount = MapUtils.get(args, "startKeyframeCount", 120);
-        config.startKeyframeInterval = MapUtils.get(args, "startKeyframeInterval", 1000);
         config.headers = headers;
         config.turnConfig = turnConfig;
 
