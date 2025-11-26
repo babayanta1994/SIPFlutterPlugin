@@ -51,6 +51,20 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
         SIPSDK.init(context, baseUrl, clientId, clientSecret, config, mediaConfig);
     }
 
+    public void initToken(
+            String token,
+            String clientId,
+            String clientSecret,
+            SIPSDKConfig config,
+            SIPSDKMediaConfig mediaConfig) {
+        //注册摄像头状态监听
+        CameraHandle.instance().addStateChangeCallback(this);
+        //注册SDK回调
+        SIPSDK.addListener(this);
+        //初始化SDK
+        SIPSDK.initToken(token, clientId, clientSecret, config, mediaConfig);
+    }
+
     @Override
     public void onStateChange(boolean runing) {
         Map<String, Object> map = new HashMap<>();

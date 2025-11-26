@@ -81,14 +81,14 @@ class SIPManage implements SIPSDKCallbacks {
       stunConfig = STUNConfig(servers: [server], enableIPv6: enableIPv6);
     }
     final config = SIPSDKConfig(
-      baseUrl: "https://api.mlscience.cn",
+      token: "DRv5aKGDEnHZ1C7tI1sfRoNvg2zLDugNkWz6kxG/A9EkdLqyxVthdER087+TKU+EprZm1VySaBqcHabVn5+POw==.avpt1JvaX9WzYCKsbmKd5P4Tbac6dROhcOS6bRT+EYsCYAZPkDq3w+x513I5utzDo0dl+7QGV5y60Giy9eaAwBTDDel8470ohvNsUASMj7jSWMEZfp0K+bXS70jpvS9LAuMzV/I3D47CYghlkFyCZig48+LVqiz6kjMlaDaoz1d0JHTZZV/g/lCU8P2/AtuxdYnKjhzbNflyEiqd72If96ZcI1lQSlbprpjhZlDU3PL7/WKelJy05OQwUE/8sA21fqFYyWLhlnbnWrhuqG1z8ScjFGj5fB1NTBWZwhCOtZVHynLPL/bnVVlMVuTzHtRmFkhRA2pfokjb8yOuLZd3Fg==",
       clientId: "1379018005584941056",
       clientSecret: "7489ed9e086e12ab45688c0caf4a7d2b",
       userAgent: 'flutter-1.0',
       mediaConfig: SIPSDKMediaConfig(),
       stunConfig: stunConfig,
     );
-    _sipSdkFlutterPlugin.initSDK(config);
+    _sipSdkFlutterPlugin.initToken(config);
   }
 
   static void localAccount() async {

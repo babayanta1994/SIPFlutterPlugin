@@ -63,6 +63,8 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     if (call.method === "initSDK") {
       this.initSDK(call, result);
       result.success(null);
+    } else if (call.method === "initToken") {
+      this.initToken(call, result);
     } else if (call.method === "localAccount") {
       this.localAccount(call, result);
     } else if (call.method === "remoteAccount") {
@@ -140,6 +142,96 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     this.printDetails("encodeConfig", encodeConfig);
 
     SIPManager.init(baseUrl, clientId, clientSecret, {
+      logLevel: logLevel,
+      userAgent: userAgent,
+      videoEnable: enableVideo,
+      workerThreadCount: workerThreadCount,
+      updateRoute: updateRoute,
+      transportStunServer: false,
+      videoOutAutoTransmit: videoOutAutoTransmit,
+      doesItSupportBroadcast: doesItSupportBroadcast,
+      allowMultipleConnections: allowMultipleConnections,
+      domainNameDirectRegistrar: domainNameDirectRegistrar,
+      customSessionName: customSessionName,
+      localCallUpdateTime: localCallUpdateTime,
+      sipSdkStunConfig: stunConfig ? {
+        count: (stunConfig.get("servers") as string[]).length,
+        servers: stunConfig.get("servers"),
+        enableIpv6: stunConfig.get("enableIpv6"),
+      } : undefined,
+    }, mediaConfig ? {
+      audioOnlyCallConfirmed: mediaConfig.get("audioOnlyCallConfirmed"),
+      audioClockRate: mediaConfig.get("audioClockRate"),
+      micGain: mediaConfig.get("micGain"),
+      speakerGain: mediaConfig.get("speakerGain"),
+      nsEnable: mediaConfig.get("nsEnable"),
+      agcEnable: mediaConfig.get("agcEnable"),
+      aecEnable: mediaConfig.get("aecEnable"),
+      aecEliminationTime: mediaConfig.get("aecEliminationTime"),
+      h264Fmtp: h264Fmtp ? {
+        profileLevelId: h264Fmtp.get("profileLevelId"),
+        packetizationMode: h264Fmtp.get("packetizationMode"),
+      } : undefined,
+      decodeConfig: decodeConfig ? {
+        enable: decodeConfig.get("enable"),
+        maxWidth: decodeConfig.get("maxWidth"),
+        maxHeight: decodeConfig.get("maxHeight"),
+        combinSpsPpsIdr: decodeConfig.get("combinSpsPpsIdr"),
+      } : undefined,
+      encodeConfig: encodeConfig ? {
+        enable: encodeConfig.get("enable"),
+        width: encodeConfig.get("width"),
+        height: encodeConfig.get("height"),
+        fps: encodeConfig.get("fps"),
+        bps: encodeConfig.get("bps"),
+        minBps: encodeConfig.get("minBps"),
+        maxBps: encodeConfig.get("maxBps"),
+        rcMode: encodeConfig.get("rcMode"),
+        frameSkip: encodeConfig.get("frameSkip"),
+        qp: encodeConfig.get("qp"),
+      } : undefined,
+    } : undefined);
+    result.success(null);
+  }
+
+  initToken(call: MethodCall, result: MethodResult) {
+    let token: string = call.argument("token");
+    let clientId: string = call.argument("clientId");
+    let clientSecret: string = call.argument("clientSecret");
+    //基础配置
+    let logLevel: number = call.argument("logLevel");
+
+    let userAgent: string = call.argument("userAgent");
+    let workerThreadCount: number = call.argument("workerThreadCount");
+    let updateRoute: boolean = call.argument("updateRoute");
+    let enableVideo: boolean = call.argument("enableVideo");
+    let videoOutAutoTransmit: boolean = call.argument("videoOutAutoTransmit");
+    let allowMultipleConnections: boolean = call.argument("allowMultipleConnections");
+    let domainNameDirectRegistrar: boolean = call.argument("domainNameDirectRegistrar");
+    let doesItSupportBroadcast: boolean = call.argument("doesItSupportBroadcast");
+    let customSessionName: string = call.argument("customSessionName");
+    let localCallUpdateTime: number = call.argument("localCallUpdateTime");
+    //stun 配置
+    let stunConfig: Map<Any, Any> = call.argument("stunConfig");
+    this.printDetails("stunConfig", stunConfig);
+
+    //媒体配置
+    let mediaConfig: Map<Any, Any> = call.argument("mediaConfig");
+    this.printDetails("mediaConfig", mediaConfig);
+
+    // H264 Fmtp
+    let h264Fmtp: Map<Any, Any> = mediaConfig.get("h264Fmtp");
+    this.printDetails("h264Fmtp", h264Fmtp);
+
+    //Decode Config
+    let decodeConfig: Map<Any, Any> = mediaConfig.get("decodeConfig");
+    this.printDetails("decodeConfig", decodeConfig);
+
+    //Encode Config
+    let encodeConfig: Map<Any, Any> = mediaConfig.get("encodeConfig");
+    this.printDetails("encodeConfig", encodeConfig);
+
+    SIPManager.initToken(token, clientId, clientSecret, {
       logLevel: logLevel,
       userAgent: userAgent,
       videoEnable: enableVideo,

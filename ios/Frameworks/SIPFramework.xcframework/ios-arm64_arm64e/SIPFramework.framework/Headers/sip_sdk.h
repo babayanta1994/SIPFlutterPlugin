@@ -227,6 +227,11 @@ extern "C"
 
     sdk_status_t sip_sdk_init_interna(const char *token);
 
+    sdk_status_t sip_sdk_init_token(const char *token,
+                                    const char *clientId,
+                                    const char *clientSecret,
+                                    const char *packageName);
+
     sdk_status_t sip_sdk_destroy();
 
     sdk_status_t sip_sdk_handle_ip_change();

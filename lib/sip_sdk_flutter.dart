@@ -17,6 +17,10 @@ class SipSdkFlutter {
     return SipSdkFlutterPlatform.instance.initSDK(config);
   }
 
+  Future<Void?> initToken(SIPSDKConfig config) {
+    return SipSdkFlutterPlatform.instance.initToken(config);
+  }
+
   Future<Void?> localAccount(SIPSDKLocalConfig config) {
     return SipSdkFlutterPlatform.instance.localAccount(config);
   }

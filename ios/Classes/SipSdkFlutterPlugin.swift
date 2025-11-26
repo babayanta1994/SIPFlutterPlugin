@@ -23,6 +23,12 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
             }
+        case "initToken":
+            if let args = call.arguments as? [String: Any] {
+                initToken(args: args, result: result)
+            } else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected dictionary", details: nil))
+            }
         case "localAccount":
             if let args = call.arguments as? [String: Any] {
                 localAccount(args: args, result: result)
@@ -185,6 +191,89 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         result(nil) // 表示成功
     }
 
+    private func initToken(args: [String: Any], result: @escaping FlutterResult) {
+        // 1. 提取 stunConfig
+        var stun: STUNConfig? = nil
+        if let stunDict = args["stunConfig"] as? [String: Any] {
+            let servers = (stunDict["servers"] as? [String]) ?? []
+            let enableIPv6 = (stunDict["enableIPv6"] as? Bool) ?? false
+            stun = STUNConfig(servers: servers, enableIPv6: enableIPv6)
+        }
+
+        // 2. 提取 mediaConfig（可选，如果你有用到）
+        var mediaConfig: SIPSDKMediaConfig? = nil
+        if let mediaDict = args["mediaConfig"] as? [String: Any] {
+            // H264 fmtp 配置
+            let h264Fmtp = mediaDict["h264Fmtp"] as? [String: Any] ?? [:]
+            // 编码配置
+            let encodeConfig = mediaDict["encodeConfig"] as? [String: Any] ?? [:]
+            H264Encoder.econfig.fps = encodeConfig["fps"] as? Int32 ?? 20
+            H264Encoder.econfig.bps = encodeConfig["bps"] as? Int32 ?? 512_000
+            H264Encoder.econfig.minBps = encodeConfig["minBps"] as? Int32 ?? 256_000
+            H264Encoder.econfig.maxBps = encodeConfig["maxBps"] as? Int32 ?? 1_024_000
+            // 解码配置
+            let decodeConfig = mediaDict["decodeConfig"] as? [String: Any] ?? [:]
+
+            mediaConfig = SIPSDKMediaConfig(
+                audioClockRate: Int32(mediaDict["audioClockRate"] as? Int ?? 16000),
+                micGain: (mediaDict["micGain"] as? NSNumber)?.floatValue ?? 1.0,
+                speakerGain: (mediaDict["speakerGain"] as? NSNumber)?.floatValue ?? 1.0,
+                nsEnable: (mediaDict["nsEnable"] as? Bool) ?? true,
+                agcEnable: (mediaDict["agcEnable"] as? Bool) ?? true,
+                aecEnable: (mediaDict["aecEnable"] as? Bool) ?? true,
+                aecEliminationTime: Int16(mediaDict["aecEliminationTime"] as? Int ?? 30),
+                notEnableEncode: !(encodeConfig["enable"] as? Bool ?? true),
+                notEnableDecode: !(decodeConfig["enable"] as? Bool ?? true),
+                decodeMaxWidth: decodeConfig["maxWidth"] as? UInt32 ?? 1920,
+                decodeMaxHeight: decodeConfig["maxHeight"] as? UInt32 ?? 1080,
+                combinSpsPpsIdr: false, // ios 不支持组合帧 decodeConfig["combinSpsPpsIdr"] as? Bool ?? false
+                profileLevelId: h264Fmtp["profileLevelId"] as? String,
+                packetizationMode: h264Fmtp["packetizationMode"] as? String
+            )
+        } else {
+            mediaConfig = SIPSDKMediaConfig()
+        }
+
+        // 配置回调
+        let callbacks = SIPSDKCallbacks(
+            onLogCallback: SIPManage.onLogCallback,
+            onInitCompleted: SIPManage.onInitCompleted,
+            onStopCompleted: SIPManage.onStopCompleted,
+            onRegistrarState: SIPManage.onRegistrarState,
+            onIncomingCall: SIPManage.onIncomingCall,
+            onDtmfInfo: SIPManage.onDtmfInfo,
+            onMessage: SIPManage.onMessage,
+            onMessageState: SIPManage.onMessageState,
+            onCallState: SIPManage.onCallState,
+            onExpireWarning: SIPManage.onExpireWarning
+        )
+
+        // 3. 提取 SIPSDKConfig 主结构体字段
+        let config = SIPSDKConfig(
+            logLevel: Int32(args["logLevel"] as? Int ?? 4),
+            userAgent: args["userAgent"] as? String ?? "",
+            workerThreadCount: Int32(args["workerThreadCount"] as? Int ?? 1),
+            updateRoute: (args["updateRoute"] as? Bool) ?? false,
+            enableVideo: (args["enableVideo"] as? Bool) ?? true,
+            sdkObserver: callbacks,
+            allowMultipleConnections: (args["allowMultipleConnections"] as? Bool) ?? false,
+            domainNameDirectRegistrar: (args["domainNameDirectRegistrar"] as? Bool) ?? false,
+            doesItSupportBroadcast: (args["doesItSupportBroadcast"] as? Bool) ?? false,
+            customSessionName: args["customSessionName"] as? String,
+            localCallUpdateTime: Int32(args["logLevel"] as? Int ?? 60),
+            stunConfig: stun
+        )
+        let token: String = args["token"] as? String ?? ""
+        let clientId: String = args["clientId"] as? String ?? ""
+        let clientSecret: String = args["clientSecret"] as? String ?? ""
+        SIPHandle.initToken(token: token,
+                            clientId: clientId,
+                            clientSecret: clientSecret,
+                            config: config,
+                            mediaConfig: mediaConfig!)
+        result(nil) // 表示成功
+    }
+
     private func localAccount(args: [String: Any], result _: @escaping FlutterResult) {
         let localConfig = REGLocalConfig(
             transport: args["transport"] as? String,
@@ -330,13 +419,13 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      * content: 内容
      */
     private func sendMessage(args: [String: Any], result: @escaping FlutterResult) {
-        let param:MessageParam = MessageParam(
+        let param = MessageParam(
             type: Int32(args["type"] as? Int32 ?? SDK_MESSAGE_TYPE_SERVER.rawValue),
             content: args["content"] as? String ?? "",
             username: args["username"] as? String,
             remoteIp: args["remoteIp"] as? String
         )
-        
+
         // 发送
         SIPHandle.sendMessage(param: param)
         // 成功回调

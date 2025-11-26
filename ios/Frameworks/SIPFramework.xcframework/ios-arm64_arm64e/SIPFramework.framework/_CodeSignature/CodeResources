@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/sip_sdk.h</key>
 		<data>
-		mtbPQuDaxbOg1Ypa8SXScJLntCg=
+		8XpHO9TViw2ZjCiU1YW9eJz4wZs=
 		</data>
 		<key>Headers/sip_sdk_aec.h</key>
 		<data>
@@ -26,11 +26,11 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		13Xq1iiUOfi80CEOGKiZjKMJgnA=
+		sHIo4Z4usGhVqQFlhskUbkZU0wE=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		FIgMvcq34buKLsdM+wSYzsyLIgI=
+		K9yuMDkhcv+/yvoo/aW7qlmB4FU=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
@@ -38,19 +38,19 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		FIgMvcq34buKLsdM+wSYzsyLIgI=
+		K9yuMDkhcv+/yvoo/aW7qlmB4FU=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		QiGiup63AEdvkdq66x01yLMVexs=
+		+vKyv6d3MQB9ud6NMYmhPP6qw+8=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.abi.json</key>
 		<data>
-		13Xq1iiUOfi80CEOGKiZjKMJgnA=
+		sHIo4Z4usGhVqQFlhskUbkZU0wE=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.private.swiftinterface</key>
 		<data>
-		1zLJBl/kQfteFMbYbsn9lLa6JI4=
+		Iw7pE6mNOixLA3lxzM302ajPln0=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftdoc</key>
 		<data>
@@ -58,11 +58,11 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftinterface</key>
 		<data>
-		1zLJBl/kQfteFMbYbsn9lLa6JI4=
+		Iw7pE6mNOixLA3lxzM302ajPln0=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftmodule</key>
 		<data>
-		oeXy15sT5rZvZalbpKeZYnzipfs=
+		pImam3Hav23NMAs4wIJ0GplUOhI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -86,7 +86,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			h+49BMUYUoqVEwd59Z0n+zjhWpu4kPU9udwhtQ8Ud7I=
+			h6610f86AM1za5nvgSyTMsvgQji6E34x+iZFtNspP9E=
 			</data>
 		</dict>
 		<key>Headers/sip_sdk_aec.h</key>
@@ -107,14 +107,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			t75cuUSY7NvpNdH7sAaRWbNUXo/4Do4LspXGOuG8NFU=
+			tbypKnwnFo+YkqFSATJpurBdW0syKBDfGojyCXRKeTo=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			9b8l9TkxWP+vuwE3e/k6qhQzCVf+XfnDcSsQ7DWV8nM=
+			P2jfYq82aPi0afclyG/rRry4KJ7WAg1uXbRsR1Uj+Fc=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftdoc</key>
@@ -128,28 +128,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9b8l9TkxWP+vuwE3e/k6qhQzCVf+XfnDcSsQ7DWV8nM=
+			P2jfYq82aPi0afclyG/rRry4KJ7WAg1uXbRsR1Uj+Fc=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			rz3l+C95m2+Q+LAMMc52nnxQZmwDe/W49hl5gO5rQBk=
+			BesJE9B167/9UvcNXriWdRTbCb7tR4BTesoaVEhwbVU=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			t75cuUSY7NvpNdH7sAaRWbNUXo/4Do4LspXGOuG8NFU=
+			tbypKnwnFo+YkqFSATJpurBdW0syKBDfGojyCXRKeTo=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zcgF/hjkS6FiEYJxDhvRjI9jZF06QliUhpIy8BHBBG0=
+			+6ILjOSPgW4jmewoYiHqYz9UEibhZkO9d0nQxl/JKms=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftdoc</key>
@@ -163,14 +163,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zcgF/hjkS6FiEYJxDhvRjI9jZF06QliUhpIy8BHBBG0=
+			+6ILjOSPgW4jmewoYiHqYz9UEibhZkO9d0nQxl/JKms=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Yk75O7OJc//WRjJo6I6juDmW9knUMjXkjKfrgCovtnk=
+			qA4XRhyvjGiFHQd0991IgY1iSM4Sd0vDS7n7Mu0OgeE=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

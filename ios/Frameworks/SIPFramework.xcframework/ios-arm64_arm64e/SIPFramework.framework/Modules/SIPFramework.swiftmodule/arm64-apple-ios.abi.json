@@ -7622,6 +7622,58 @@
           },
           {
             "kind": "Function",
+            "name": "initToken",
+            "printedName": "initToken(token:clientId:clientSecret:config:mediaConfig:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SIPSDKConfig",
+                "printedName": "SIPFramework.SIPSDKConfig",
+                "usr": "s:12SIPFramework12SIPSDKConfigV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SIPSDKMediaConfig",
+                "printedName": "SIPFramework.SIPSDKMediaConfig",
+                "usr": "s:12SIPFramework17SIPSDKMediaConfigV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:12SIPFramework9SIPHandleC9initToken5token8clientId0F6Secret6config11mediaConfigySS_S2SAA12SIPSDKConfigVAA011SIPSDKMediaK0VtFZ",
+            "mangledName": "$s12SIPFramework9SIPHandleC9initToken5token8clientId0F6Secret6config11mediaConfigySS_S2SAA12SIPSDKConfigVAA011SIPSDKMediaK0VtFZ",
+            "moduleName": "SIPFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "destroy",
             "printedName": "destroy()",
             "children": [

@@ -96,6 +96,11 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
+  Future<Void?> initToken(SIPSDKConfig config) async {
+    return await methodChannel.invokeMethod<Void>('initToken', config.toJson());
+  }
+
+  @override
   Future<Void?> localAccount(SIPSDKLocalConfig config) async {
     return await methodChannel.invokeMethod<Void>(
         'localAccount', config.toJson());

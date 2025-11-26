@@ -38,6 +38,10 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('initSDK() has not been implemented.');
   }
 
+  Future<Void?> initToken(SIPSDKConfig config) {
+    throw UnimplementedError('initToken() has not been implemented.');
+  }
+
   Future<Void?> localAccount(SIPSDKLocalConfig config) {
     throw UnimplementedError('localAccount() has not been implemented.');
   }

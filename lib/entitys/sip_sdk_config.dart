@@ -2,7 +2,8 @@ import 'sip_sdk_stun_config.dart';
 import 'sip_sdk_media_config.dart';
 
 class SIPSDKConfig {
-  final String baseUrl;
+  final String? baseUrl;
+  final String? token;
   final String clientId;
   final String clientSecret;
   final int logLevel;
@@ -20,7 +21,8 @@ class SIPSDKConfig {
   final SIPSDKMediaConfig? mediaConfig;
 
   SIPSDKConfig({
-    this.baseUrl = "",
+    this.baseUrl,
+    this.token,
     this.clientId = "",
     this.clientSecret = "",
     this.logLevel = 4,
@@ -41,6 +43,7 @@ class SIPSDKConfig {
   Map<String, Object?> toJson() {
     return {
       'baseUrl': baseUrl,
+      'token': token,
       'clientId': clientId,
       'clientSecret': clientSecret,
       'logLevel': logLevel,
@@ -62,6 +65,7 @@ class SIPSDKConfig {
   factory SIPSDKConfig.fromJson(Map<String, dynamic> json) {
     return SIPSDKConfig(
       baseUrl: json['baseUrl'] as String? ?? "",
+      token: json['token'] as String? ?? "",
       clientId: json['clientId'] as String? ?? "",
       clientSecret: json['clientSecret'] as String? ?? "",
       logLevel: json['logLevel'] is int ? json['logLevel'] as int : 4,

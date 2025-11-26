@@ -138,6 +138,7 @@ public struct MessageParam {
 }
 @_hasMissingDesignatedInitializers public class SIPHandle {
   public static func initSDK(baseUrl: Swift.String, clientId: Swift.String, clientSecret: Swift.String, config: SIPFramework.SIPSDKConfig, mediaConfig: SIPFramework.SIPSDKMediaConfig)
+  public static func initToken(token: Swift.String, clientId: Swift.String, clientSecret: Swift.String, config: SIPFramework.SIPSDKConfig, mediaConfig: SIPFramework.SIPSDKMediaConfig)
   public static func destroy()
   public static func localAccount(localConfig: SIPFramework.REGLocalConfig)
   public static func remoteAccount(config: SIPFramework.REGConfig)

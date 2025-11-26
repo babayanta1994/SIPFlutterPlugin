@@ -57,9 +57,13 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.flutterPluginBinding = flutterPluginBinding;
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "sip_sdk_flutter");
-        channel.setMethodCallHandler(this);
-        SipSdkFlutterPlugin.context = flutterPluginBinding.getApplicationContext();
+        if (channel == null) {
+            channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "sip_sdk_flutter");
+            channel.setMethodCallHandler(this);
+        }
+        if (context == null) {
+            context = flutterPluginBinding.getApplicationContext();
+        }
     }
 
     @Override
@@ -97,6 +101,8 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("initSDK")) {
             initSDK(call.arguments(), result);
+        } else if (call.method.equals("initToken")) {
+            this.initToken(call.arguments(), result);
         } else if (call.method.equals("localAccount")) {
             this.localAccount(call.arguments(), result);
         } else if (call.method.equals("remoteAccount")) {
@@ -246,6 +252,77 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         String clientId = MapUtils.get(args, "clientId", "");
         String clientSecret = MapUtils.get(args, "clientSecret", "");
         SIPManage.instance().init(context, baseUrl, clientId, clientSecret, config, mediaConfig);
+        result.success(null);
+    }
+
+    private void initToken(Map<String, Object> args, MethodChannel.Result result) {
+        Map<String, Object> stunDict = MapUtils.getMap(args, "stunConfig");
+        SIPSDKStunConfig stunConfig = null;
+        if (stunDict != null) {
+            List<String> servers = MapUtils.get(stunDict, "servers", new ArrayList<>());
+            boolean enableIPv6 = MapUtils.get(stunDict, "enableIPv6", false);
+            stunConfig = new SIPSDKStunConfig();
+            stunConfig.count = servers.size();
+            stunConfig.servers = servers;
+            stunConfig.enableIpv6 = enableIPv6;
+        }
+
+        Map<String, Object> mediaDict = MapUtils.getMap(args, "mediaConfig");
+        SIPSDKMediaConfig mediaConfig = new SIPSDKMediaConfig();
+        if (mediaDict != null) {
+            mediaConfig.audioClockRate = MapUtils.get(mediaDict, "audioClockRate", 16000);
+            mediaConfig.micGain = MapUtils.get(mediaDict, "micGain", 1.0f);
+            mediaConfig.speakerGain = MapUtils.get(mediaDict, "speakerGain", 1.0f);
+            mediaConfig.nsEnable = MapUtils.get(mediaDict, "nsEnable", true);
+            mediaConfig.agcEnable = MapUtils.get(mediaDict, "agcEnable", true);
+            mediaConfig.aecEnable = MapUtils.get(mediaDict, "aecEnable", true);
+            mediaConfig.aecEliminationTime = MapUtils.get(mediaDict, "aecEliminationTime", (short) 30);
+
+            Map<String, Object> decodeConfig = MapUtils.get(mediaDict, "decodeConfig", new HashMap<>());
+            mediaConfig.decodeMaxWidth = MapUtils.get(decodeConfig, "maxWidth", 1920);
+            mediaConfig.decodeMaxHeight = MapUtils.get(decodeConfig, "maxHeight", 1080);
+            mediaConfig.notEnableDecode = !MapUtils.get(decodeConfig, "enable", true);
+            mediaConfig.combinSpsPpsIdr = MapUtils.get(decodeConfig, "combinSpsPpsIdr", true);
+
+            Map<String, Object> encodeConfig = MapUtils.get(mediaDict, "encodeConfig", new HashMap<>());
+            mediaConfig.notEnableEncode = !MapUtils.get(encodeConfig, "enable", true);
+            H264CodecImpl.econfig.frameSkip = MapUtils.get(encodeConfig, "frameSkip", true);
+            H264CodecImpl.econfig.rcMode = MapUtils.get(encodeConfig, "rcMode", EncoderConfig.RC_BITRATE_MODE);
+            H264CodecImpl.econfig.fps = MapUtils.get(encodeConfig, "fps", 15);
+            H264CodecImpl.econfig.bps = MapUtils.get(encodeConfig, "bps", 512000);
+            H264CodecImpl.econfig.minBps = MapUtils.get(encodeConfig, "minBps", 256000);
+            H264CodecImpl.econfig.maxBps = MapUtils.get(encodeConfig, "maxBps", 1024000);
+            H264CodecImpl.econfig.qp = MapUtils.get(encodeConfig, "qp", 25);
+
+            Map<String, Object> h264Fmtp = MapUtils.get(mediaDict, "h264Fmtp", new HashMap<>());
+            String profileLevelId = MapUtils.get(h264Fmtp, "profileLevelId", null);
+            String packetizationMode = MapUtils.get(h264Fmtp, "packetizationMode", null);
+            if (profileLevelId != null && !profileLevelId.isEmpty() && packetizationMode != null && !packetizationMode.isEmpty()) {
+                if (mediaConfig.h264Fmtp == null) {
+                    mediaConfig.h264Fmtp = new SIPSDKMediaH264Fmtp();
+                }
+                mediaConfig.h264Fmtp.profileLevelId = profileLevelId;
+                mediaConfig.h264Fmtp.packetizationMode = packetizationMode;
+            }
+        }
+
+        SIPSDKConfig config = new SIPSDKConfig();
+        config.logLevel = MapUtils.get(args, "logLevel", 4);
+        config.userAgent = MapUtils.get(args, "userAgent", "");
+        config.workerThreadCount = MapUtils.get(args, "workerThreadCount", 1);
+        config.updateRoute = MapUtils.get(args, "updateRoute", false);
+        config.videoEnable = MapUtils.get(args, "enableVideo", true);
+        config.videoOutAutoTransmit = MapUtils.get(args, "videoOutAutoTransmit", true);
+        config.allowMultipleConnections = MapUtils.get(args, "allowMultipleConnections", false);
+        config.domainNameDirectRegistrar = MapUtils.get(args, "domainNameDirectRegistrar", false);
+        config.doesItSupportBroadcast = MapUtils.get(args, "doesItSupportBroadcast", false);
+        config.customSessionName = MapUtils.get(args, "customSessionName", null);
+        config.localCallUpdateTime = MapUtils.get(args, "localCallUpdateTime", 60);
+        config.stunConfig = stunConfig;
+        String token = MapUtils.get(args, "token", "");
+        String clientId = MapUtils.get(args, "clientId", "");
+        String clientSecret = MapUtils.get(args, "clientSecret", "");
+        SIPManage.instance().initToken(token, clientId, clientSecret, config, mediaConfig);
         result.success(null);
     }
 
