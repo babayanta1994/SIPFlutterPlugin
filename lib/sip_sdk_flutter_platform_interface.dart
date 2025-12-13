@@ -106,6 +106,22 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('destroy() has not been implemented.');
   }
 
+  Future<void> startRecording() {
+    throw UnimplementedError('startRecording() has not been implemented.');
+  }
+
+  Future<void> stopRecording() {
+    throw UnimplementedError('stopRecording() has not been implemented.');
+  }
+
+  Future<void> startPlaying() {
+    throw UnimplementedError('startPlaying() has not been implemented.');
+  }
+
+  Future<void> stopPlaying() {
+    throw UnimplementedError('stopPlaying() has not been implemented.');
+  }
+
   Future<bool?> isMute() {
     throw UnimplementedError('isMute() has not been implemented.');
   }

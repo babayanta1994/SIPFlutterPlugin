@@ -87,6 +87,14 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             handleIpChange(args: [:], result: result)
         case "destroy":
             destroy(args: [:], result: result)
+        case "startRecording":
+            startRecording(args: [:], result: result)
+        case "stopRecording":
+            stopRecording(args: [:], result: result)
+        case "startPlaying":
+            startPlaying(args: [:], result: result)
+        case "stopPlaying":
+            stopPlaying(args: [:], result: result)
         case "isMute":
             isMute(args: [:], result: result)
         case "setMute":
@@ -465,6 +473,38 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      */
     private func destroy(args _: [String: Any], result: @escaping FlutterResult) {
         SIPHandle.destroy()
+        result(nil)
+    }
+
+    /**
+     *  开始录音
+     */
+    private func startRecording(args _: [String: Any], result: @escaping FlutterResult) {
+        PCMRecorder.instance.start()
+        result(nil)
+    }
+
+    /**
+     *  停止录音
+     */
+    private func stopRecording(args _: [String: Any], result: @escaping FlutterResult) {
+        PCMRecorder.instance.stop()
+        result(nil)
+    }
+
+    /**
+     *  开始播放
+     */
+    private func startPlaying(args _: [String: Any], result: @escaping FlutterResult) {
+        PCMPlayer.instance.start()
+        result(nil)
+    }
+
+    /**
+     *  停止播放
+     */
+    private func stopPlaying(args _: [String: Any], result: @escaping FlutterResult) {
+        PCMPlayer.instance.stop()
         result(nil)
     }
 

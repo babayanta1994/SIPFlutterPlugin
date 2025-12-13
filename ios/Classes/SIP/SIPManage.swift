@@ -162,14 +162,6 @@ public class SIPManage {
 
     static let onCallState: OnCallState = { callUUID, state in
         print("Call state changed. UUID: \(callUUID), State: \(state)")
-        // 呼叫连接，开启声音
-        if state == CALL_STATE_CONFIRMED.rawValue {
-            PCMPlayer.instance.addConsumer(uuid: callUUID)
-            PCMRecorder.instance.addConsumer(uuid: callUUID)
-        } else if state == CALL_STATE_DISCONNECTED.rawValue {
-            PCMPlayer.instance.removeConsumer(uuid: callUUID)
-            PCMRecorder.instance.removeConsumer(uuid: callUUID)
-        }
         // 呼叫状态改变
         NotificationCenter.default.post(
             name: .SIP_CALL_STATE_CHANGE,

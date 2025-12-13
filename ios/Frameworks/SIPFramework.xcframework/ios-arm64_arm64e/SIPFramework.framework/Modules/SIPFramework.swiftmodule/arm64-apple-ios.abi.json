@@ -8400,24 +8400,18 @@
           },
           {
             "kind": "Function",
-            "name": "addConsumer",
-            "printedName": "addConsumer(uuid:)",
+            "name": "start",
+            "printedName": "start()",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "Void",
                 "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UInt64",
-                "printedName": "Swift.UInt64",
-                "usr": "s:s6UInt64V"
               }
             ],
             "declKind": "Func",
-            "usr": "s:12SIPFramework9PCMPlayerC11addConsumer4uuidys6UInt64V_tF",
-            "mangledName": "$s12SIPFramework9PCMPlayerC11addConsumer4uuidys6UInt64V_tF",
+            "usr": "s:12SIPFramework9PCMPlayerC5startyyF",
+            "mangledName": "$s12SIPFramework9PCMPlayerC5startyyF",
             "moduleName": "SIPFramework",
             "declAttributes": [
               "AccessControl"
@@ -8426,24 +8420,18 @@
           },
           {
             "kind": "Function",
-            "name": "removeConsumer",
-            "printedName": "removeConsumer(uuid:)",
+            "name": "stop",
+            "printedName": "stop()",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "Void",
                 "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UInt64",
-                "printedName": "Swift.UInt64",
-                "usr": "s:s6UInt64V"
               }
             ],
             "declKind": "Func",
-            "usr": "s:12SIPFramework9PCMPlayerC14removeConsumer4uuidys6UInt64V_tF",
-            "mangledName": "$s12SIPFramework9PCMPlayerC14removeConsumer4uuidys6UInt64V_tF",
+            "usr": "s:12SIPFramework9PCMPlayerC4stopyyF",
+            "mangledName": "$s12SIPFramework9PCMPlayerC4stopyyF",
             "moduleName": "SIPFramework",
             "declAttributes": [
               "AccessControl"
@@ -8617,24 +8605,18 @@
           },
           {
             "kind": "Function",
-            "name": "addConsumer",
-            "printedName": "addConsumer(uuid:)",
+            "name": "start",
+            "printedName": "start()",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "Void",
                 "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UInt64",
-                "printedName": "Swift.UInt64",
-                "usr": "s:s6UInt64V"
               }
             ],
             "declKind": "Func",
-            "usr": "s:12SIPFramework11PCMRecorderC11addConsumer4uuidys6UInt64V_tF",
-            "mangledName": "$s12SIPFramework11PCMRecorderC11addConsumer4uuidys6UInt64V_tF",
+            "usr": "s:12SIPFramework11PCMRecorderC5startyyF",
+            "mangledName": "$s12SIPFramework11PCMRecorderC5startyyF",
             "moduleName": "SIPFramework",
             "declAttributes": [
               "AccessControl"
@@ -8643,24 +8625,18 @@
           },
           {
             "kind": "Function",
-            "name": "removeConsumer",
-            "printedName": "removeConsumer(uuid:)",
+            "name": "stop",
+            "printedName": "stop()",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "Void",
                 "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UInt64",
-                "printedName": "Swift.UInt64",
-                "usr": "s:s6UInt64V"
               }
             ],
             "declKind": "Func",
-            "usr": "s:12SIPFramework11PCMRecorderC14removeConsumer4uuidys6UInt64V_tF",
-            "mangledName": "$s12SIPFramework11PCMRecorderC14removeConsumer4uuidys6UInt64V_tF",
+            "usr": "s:12SIPFramework11PCMRecorderC4stopyyF",
+            "mangledName": "$s12SIPFramework11PCMRecorderC4stopyyF",
             "moduleName": "SIPFramework",
             "declAttributes": [
               "AccessControl"
@@ -9604,14 +9580,14 @@
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Utils\/PCMPlayer.swift",
       "kind": "StringLiteral",
-      "offset": 627,
+      "offset": 556,
       "length": 17,
       "value": "\"pcm.player.sync\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Utils\/PCMPlayer.swift",
       "kind": "BooleanLiteral",
-      "offset": 1514,
+      "offset": 1386,
       "length": 4,
       "value": "true"
     },
@@ -9646,21 +9622,21 @@
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Utils\/PCMRecorder.swift",
       "kind": "StringLiteral",
-      "offset": 586,
+      "offset": 538,
       "length": 19,
       "value": "\"pcm.recorder.sync\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Utils\/PCMRecorder.swift",
       "kind": "Array",
-      "offset": 648,
+      "offset": 600,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Utils\/PCMRecorder.swift",
       "kind": "BooleanLiteral",
-      "offset": 682,
+      "offset": 634,
       "length": 5,
       "value": "false"
     },

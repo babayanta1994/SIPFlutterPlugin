@@ -97,6 +97,22 @@ class SipSdkFlutter {
     return SipSdkFlutterPlatform.instance.destroy();
   }
 
+  Future<void> startRecording() {
+    return SipSdkFlutterPlatform.instance.startRecording();
+  }
+
+  Future<void> stopRecording() {
+    return SipSdkFlutterPlatform.instance.stopRecording();
+  }
+
+  Future<void> startPlaying() {
+    return SipSdkFlutterPlatform.instance.startPlaying();
+  }
+
+  Future<void> stopPlaying() {
+    return SipSdkFlutterPlatform.instance.stopPlaying();
+  }
+
   Future<bool?> isMute() {
     return SipSdkFlutterPlatform.instance.isMute();
   }

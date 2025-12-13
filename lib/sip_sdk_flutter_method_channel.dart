@@ -203,6 +203,26 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
+  Future<Void?> startRecording() async {
+    return await methodChannel.invokeMethod<Void>('startRecording');
+  }
+
+  @override
+  Future<Void?> stopRecording() async {
+    return await methodChannel.invokeMethod<Void>('stopRecording');
+  }
+
+  @override
+  Future<Void?> startPlaying() async {
+    return await methodChannel.invokeMethod<Void>('startPlaying');
+  }
+
+  @override
+  Future<Void?> stopPlaying() async {
+    return await methodChannel.invokeMethod<Void>('stopPlaying');
+  }
+
+  @override
   Future<bool?> isMute() async {
     return await methodChannel.invokeMethod<bool>('isMute');
   }

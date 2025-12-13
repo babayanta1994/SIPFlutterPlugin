@@ -164,8 +164,8 @@ public struct SIPSDKMediaConfig {
   public static let instance: SIPFramework.PCMPlayer
   public func speakerEnabled() -> Swift.Bool
   public func setSpeaker(enabled: Swift.Bool)
-  public func addConsumer(uuid: SIPFramework.sdk_uuid_t)
-  public func removeConsumer(uuid: SIPFramework.sdk_uuid_t)
+  public func start()
+  public func stop()
   public func put(data: Foundation.Data)
   @objc deinit
 }
@@ -173,8 +173,8 @@ public struct SIPSDKMediaConfig {
   public static let instance: SIPFramework.PCMRecorder
   public func muteEnabled() -> Swift.Bool
   public func setMute(enabled: Swift.Bool)
-  public func addConsumer(uuid: SIPFramework.sdk_uuid_t)
-  public func removeConsumer(uuid: SIPFramework.sdk_uuid_t)
+  public func start()
+  public func stop()
   public func getPCM() -> Foundation.Data?
   @objc deinit
 }
