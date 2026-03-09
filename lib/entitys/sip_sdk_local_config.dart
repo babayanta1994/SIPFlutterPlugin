@@ -4,6 +4,7 @@ class SIPSDKLocalConfig {
   final String? username;
   final String? boundAddr;
   final String? publicAddr;
+  final int? lockCodec;
   final bool enableStreamControl;
   final int streamElapsed;
 
@@ -13,6 +14,7 @@ class SIPSDKLocalConfig {
     this.port = 5060,
     this.boundAddr,
     this.publicAddr,
+    this.lockCodec = 0,
     this.enableStreamControl = false,
     this.streamElapsed = 0,
   });
@@ -23,6 +25,7 @@ class SIPSDKLocalConfig {
         'port': port,
         'boundAddr': boundAddr,
         'publicAddr': publicAddr,
+        'lockCodec': lockCodec,
         'enableStreamControl': enableStreamControl,
         'streamElapsed': streamElapsed,
       };

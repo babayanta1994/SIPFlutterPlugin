@@ -44,12 +44,16 @@ public class SIPManage {
             "state": state,
             "message": message ?? "",
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onInitCompleted", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onInitCompleted", arguments: payload)
+        }
     }
 
     static let onStopCompleted: OnStopCompleted = {
         print("SDK stopped.")
-        SipSdkFlutterPlugin.channel?.invokeMethod("onStopCompleted", arguments: nil)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onStopCompleted", arguments: nil)
+        }
     }
 
     static let onRegistrarState: OnRegistrarState = { state in
@@ -58,7 +62,9 @@ public class SIPManage {
         let payload: [String: Any] = [
             "state": state,
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onRegistrarState", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onRegistrarState", arguments: payload)
+        }
     }
 
     static let onIncomingCall: OnIncomingCall = { callParam in
@@ -84,11 +90,13 @@ public class SIPManage {
             "username": String(cString: callParam.username),
             "remoteIp": String(cString: callParam.remote_ip),
             "headers": headers,
-            "callUUID": "\(callParam.call_uuid)", // 转成 String
+            "callUuid": "\(callParam.call_uuid)", // 转成 String
             "transmitVideo": callParam.transmit_video,
             "transmitSound": callParam.transmit_sound,
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onIncomingCall", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onIncomingCall", arguments: payload)
+        }
     }
 
     static let onDtmfInfo: OnDtmfInfo = { dtmfInfoParam in
@@ -103,12 +111,14 @@ public class SIPManage {
             content = String(cString: c)
         }
         let payload: [String: Any] = [
-            "callUUID": "\(dtmfInfoParam.call_uuid)",
+            "callUuid": "\(dtmfInfoParam.call_uuid)",
             "dtmfInfoType": dtmfInfoParam.dtmf_info_type,
             "contentType": contentType ?? "",
             "content": content ?? "",
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onDtmfInfo", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onDtmfInfo", arguments: payload)
+        }
     }
 
     static let onMessage: OnMessage = { messageParam in
@@ -131,7 +141,9 @@ public class SIPManage {
             "remoteIp": remoteIp ?? "",
             "content": content ?? "",
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onMessage", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onMessage", arguments: payload)
+        }
     }
 
     static let onMessageState: OnMessageState = { state, messageParam in
@@ -157,23 +169,33 @@ public class SIPManage {
                 "content": content ?? "",
             ],
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onMessageState", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onMessageState", arguments: payload)
+        }
     }
 
-    static let onCallState: OnCallState = { callUUID, state in
-        print("Call state changed. UUID: \(callUUID), State: \(state)")
+    static let onCallState: OnCallState = { param in
+        print("Call state changed. callUuid: \(param.call_uuid), State: \(param.state)")
+        var lastStatusText: String?
+        if let text = param.last_status_text {
+            lastStatusText = String(cString: text)
+        }
         // 呼叫状态改变
         NotificationCenter.default.post(
             name: .SIP_CALL_STATE_CHANGE,
             object: nil,
-            userInfo: ["callUUID": callUUID, "state": state]
+            userInfo: ["callUuid": param.call_uuid, "state": param.state, "lastStatus": param.last_status, "lastStatusText": lastStatusText ?? ""]
         )
 
         let payload: [String: Any] = [
-            "callUUID": "\(callUUID)",
-            "state": state,
+            "callUuid": "\(param.call_uuid)",
+            "state": param.state,
+            "lastStatus": param.last_status,
+            "lastStatusText": lastStatusText ?? "",
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onCallState", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onCallState", arguments: payload)
+        }
     }
 
     static let onExpireWarning: ExpireWarningCallback = { expireTime, currentTime in
@@ -185,6 +207,14 @@ public class SIPManage {
             "expireTime": dateFormatter.string(from: expireDate),
             "currentTime": dateFormatter.string(from: currentDate),
         ]
-        SipSdkFlutterPlugin.channel?.invokeMethod("onExpireWarning", arguments: payload)
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onExpireWarning", arguments: payload)
+        }
+    }
+
+    static let onActivityCheck: ActivityCheckCallback = {
+        DispatchQueue.main.async {
+            SipSdkFlutterPlugin.channel?.invokeMethod("onActivityCheck", arguments: [])
+        }
     }
 }

@@ -33,7 +33,7 @@ export class SIPManager {
     onIncomingCall: (param: SIPCallParam) => {
       let map: Map<Any, Any> = new Map();
       map.set("callType", param.callType);
-      map.set("callUUID", param.callUuid?.toString());
+      map.set("callUuid", param.callUuid?.toString());
       map.set("username", param.username);
       map.set("remoteIp", param.remoteIp);
       map.set("transmitVideo", param.transmitVideo);
@@ -43,13 +43,13 @@ export class SIPManager {
     },
     onCallState: (callUuid: bigint, state: number) => {
       let map: Map<Any, Any> = new Map();
-      map.set("callUUID", callUuid.toString());
+      map.set("callUuid", callUuid.toString());
       map.set("state", state);
       SipSdkFlutterPlugin.channel?.invokeMethod("onCallState", map);
     },
     onDtmfInfo: (param: SIPDtmfInfoParam) => {
       let map: Map<Any, Any> = new Map();
-      map.set("callUUID", param.callUuid?.toString());
+      map.set("callUuid", param.callUuid?.toString());
       map.set("dtmfInfoType", param.dtmfInfoType);
       map.set("contentType", param.contentType);
       map.set("content", param.content);

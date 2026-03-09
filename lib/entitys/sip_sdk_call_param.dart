@@ -3,7 +3,7 @@ class SIPSDKCallParam {
   final String username;
   final String remoteIp;
   final Map<String, String> headers;
-  final String callUUID;
+  final String callUuid;
   final bool transmitVideo;
   final bool transmitSound;
 
@@ -12,7 +12,7 @@ class SIPSDKCallParam {
     required this.username,
     required this.remoteIp,
     required this.headers,
-    required this.callUUID,
+    required this.callUuid,
     required this.transmitVideo,
     required this.transmitSound,
   });
@@ -25,7 +25,7 @@ class SIPSDKCallParam {
       username: map['username'] ?? '',
       remoteIp: map['remoteIp'] ?? '',
       headers: headerMap,
-      callUUID: map['callUUID'] ?? '',
+      callUuid: map['callUuid'] ?? '',
       transmitVideo: (map['transmitVideo'] ?? 0) == 1,
       transmitSound: (map['transmitSound'] ?? 0) == 1,
     );
@@ -37,7 +37,7 @@ class SIPSDKCallParam {
       'username': username,
       'remoteIp': remoteIp,
       'headers': headers,
-      'callUUID': callUUID,
+      'callUuid': callUuid,
       'transmitVideo': transmitVideo ? 1 : 0,
       'transmitSound': transmitSound ? 1 : 0,
     };
@@ -45,6 +45,6 @@ class SIPSDKCallParam {
 
   @override
   String toString() {
-    return 'SIPSDKCallParam{callType: $callType, username: $username, remoteIp: $remoteIp, headers: $headers, callUUID: $callUUID, transmitVideo: $transmitVideo, transmitSound: $transmitSound}';
+    return 'SIPSDKCallParam{callType: $callType, username: $username, remoteIp: $remoteIp, headers: $headers, callUuid: $callUuid, transmitVideo: $transmitVideo, transmitSound: $transmitSound}';
   }
 }

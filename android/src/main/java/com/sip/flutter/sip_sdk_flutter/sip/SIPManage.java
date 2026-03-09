@@ -9,6 +9,7 @@ import com.sip.flutter.sip_sdk_flutter.utils.camera.CameraHandle;
 import com.sip.flutter.sip_sdk_flutter.utils.camera.CameraStateChangeCallback;
 import com.sip.sdk.SIPSDK;
 import com.sip.sdk.entity.SIPSDKCallParam;
+import com.sip.sdk.entity.SIPSDKCallStatusParam;
 import com.sip.sdk.entity.SIPSDKConfig;
 import com.sip.sdk.entity.SIPSDKDtmfInfoParam;
 import com.sip.sdk.entity.SIPSDKMediaConfig;
@@ -26,6 +27,7 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
         SIPSDKListener.IncomingCallListener,
         SIPSDKListener.CallStateListener,
         SIPSDKListener.ExpireWarningCallbackListener,
+        SIPSDKListener.ActivityCheckCallbackListener,
         CameraStateChangeCallback {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -110,7 +112,7 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
         payload.put("username", param.username);
         payload.put("remoteIp", param.remoteIp);
         payload.put("headers", param.headers);
-        payload.put("callUUID", String.valueOf(param.callUuid));
+        payload.put("callUuid", String.valueOf(param.callUuid));
         payload.put("transmitVideo", param.transmitVideo);
         payload.put("transmitSound", param.transmitSound);
         handler.post(() -> {
@@ -119,10 +121,12 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
     }
 
     @Override
-    public void onCallState(long callUuid, int state) {
+    public void onCallState(SIPSDKCallStatusParam param) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("state", state);
-        payload.put("callUUID", String.valueOf(callUuid));
+        payload.put("state", param.state);
+        payload.put("callUuid", String.valueOf(param.callUuid));
+        payload.put("lastStatus", param.lastStatus);
+        payload.put("lastStatusText", param.lastStatusText);
         handler.post(() -> {
             SipSdkFlutterPlugin.channel.invokeMethod("onCallState", payload);
         });
@@ -131,7 +135,7 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
     @Override
     public void onDtmfInfo(SIPSDKDtmfInfoParam param) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("callUUID", String.valueOf(param.callUuid));
+        payload.put("callUuid", String.valueOf(param.callUuid));
         payload.put("dtmfInfoType", param.dtmfInfoType);
         payload.put("contentType", param.contentType);
         payload.put("content", param.content);
@@ -164,6 +168,14 @@ public class SIPManage implements SIPSDKListener.InitCompletedListener,
         payload.put("message", message);
         handler.post(() -> {
             SipSdkFlutterPlugin.channel.invokeMethod("onMessageState", payload);
+        });
+    }
+
+    @Override
+    public void onActivityCheck() {
+        Map<String, Object> payload = new HashMap<>();
+        handler.post(() -> {
+            SipSdkFlutterPlugin.channel.invokeMethod("onActivityCheck", payload);
         });
     }
 }

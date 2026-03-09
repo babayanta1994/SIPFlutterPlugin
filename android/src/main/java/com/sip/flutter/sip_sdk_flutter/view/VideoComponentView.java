@@ -10,25 +10,18 @@ import androidx.annotation.Nullable;
 
 import com.sip.flutter.sip_sdk_flutter.R;
 import com.sip.flutter.sip_sdk_flutter.codes.H264CodecImpl;
-import com.sip.flutter.sip_sdk_flutter.utils.audio.AudioHandle;
 import com.sip.flutter.sip_sdk_flutter.view.cameragl.YUVRenderer;
-import com.sip.sdk.SIPSDK;
-import com.sip.sdk.entity.SDKConstants;
-import com.sip.sdk.i.SIPSDKListener;
 
 import java.util.Map;
 
 import io.flutter.plugin.platform.PlatformView;
 
-public class VideoComponentView implements PlatformView, H264CodecImpl.DecodeCallback, SIPSDKListener.CallStateListener {
+public class VideoComponentView implements PlatformView, H264CodecImpl.DecodeCallback {
     final String TAG = VideoComponentView.class.getName();
-    private Context context;
     private final View view;
     private final YUVRenderer yuvRenderer;
 
     VideoComponentView(final Context context, Map<String, Object> params) {
-        this.context = context;
-        SIPSDK.addListener(this);
         H264CodecImpl.addListener(this);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,17 +41,7 @@ public class VideoComponentView implements PlatformView, H264CodecImpl.DecodeCal
 
     @Override
     public void dispose() {
-        AudioHandle.instance().stop();
         H264CodecImpl.removeListener(this);
-        SIPSDK.removeListener(this);
-    }
-
-    @Override
-    public void onCallState(long callUuid, int state) {
-        if (SDKConstants.CALL_STATE_CONFIRMED == state) {
-            //开启声音
-            AudioHandle.instance().start();
-        }
     }
 
     @Override

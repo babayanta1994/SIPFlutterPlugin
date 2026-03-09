@@ -14,6 +14,14 @@ public class AudioRecorder {
     private final int bufferSize = 640;
     private AudioRecord audioRecord = null;
 
+    private static class Instance {
+        private static final AudioRecorder instance = new AudioRecorder();
+    }
+
+    public static AudioRecorder instance() {
+        return AudioRecorder.Instance.instance;
+    }
+
     public void init() {
         if (ActivityCompat.checkSelfPermission(SipSdkFlutterPlugin.context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;

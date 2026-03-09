@@ -61,10 +61,11 @@ public typealias OnIncomingCall = @convention(c) (SIPFramework.sip_sdk_call_para
 public typealias OnDtmfInfo = @convention(c) (SIPFramework.sip_sdk_dtmf_info_param) -> Swift.Void
 public typealias OnMessage = @convention(c) (SIPFramework.sip_sdk_message_param) -> Swift.Void
 public typealias OnMessageState = @convention(c) (Swift.Int32, SIPFramework.sip_sdk_message_param) -> Swift.Void
-public typealias OnCallState = @convention(c) (SIPFramework.sdk_uuid_t, Swift.Int32) -> Swift.Void
+public typealias OnCallState = @convention(c) (SIPFramework.sip_sdk_call_status_param) -> Swift.Void
 public typealias ExpireWarningCallback = @convention(c) (sys_types.time_t, sys_types.time_t) -> Swift.Void
+public typealias ActivityCheckCallback = @convention(c) () -> Swift.Void
 public struct SIPSDKCallbacks {
-  public init(onLogCallback: SIPFramework.OnLogCallback? = nil, onInitCompleted: SIPFramework.OnInitCompleted? = nil, onStopCompleted: SIPFramework.OnStopCompleted? = nil, onRegistrarState: SIPFramework.OnRegistrarState? = nil, onIncomingCall: SIPFramework.OnIncomingCall? = nil, onDtmfInfo: SIPFramework.OnDtmfInfo? = nil, onMessage: SIPFramework.OnMessage? = nil, onMessageState: SIPFramework.OnMessageState? = nil, onCallState: SIPFramework.OnCallState? = nil, onExpireWarning: SIPFramework.ExpireWarningCallback? = nil)
+  public init(onLogCallback: SIPFramework.OnLogCallback? = nil, onInitCompleted: SIPFramework.OnInitCompleted? = nil, onStopCompleted: SIPFramework.OnStopCompleted? = nil, onRegistrarState: SIPFramework.OnRegistrarState? = nil, onIncomingCall: SIPFramework.OnIncomingCall? = nil, onDtmfInfo: SIPFramework.OnDtmfInfo? = nil, onMessage: SIPFramework.OnMessage? = nil, onMessageState: SIPFramework.OnMessageState? = nil, onCallState: SIPFramework.OnCallState? = nil, onExpireWarning: SIPFramework.ExpireWarningCallback? = nil, onActivityCheck: SIPFramework.ActivityCheckCallback? = nil)
 }
 public struct STUNConfig {
   public var servers: [Swift.String]
@@ -73,6 +74,7 @@ public struct STUNConfig {
 }
 public struct SIPSDKConfig {
   public var logLevel: Swift.Int32
+  public var port: Swift.UInt32
   public var userAgent: Swift.String?
   public var workerThreadCount: Swift.Int32
   public var updateRoute: Swift.Int32
@@ -84,7 +86,7 @@ public struct SIPSDKConfig {
   public var customSessionName: Swift.String?
   public var localCallUpdateTime: Swift.Int32
   public var stunConfig: SIPFramework.STUNConfig?
-  public init(publicAddr _: Swift.String? = nil, logLevel: Swift.Int32 = 4, userAgent: Swift.String? = "", workerThreadCount: Swift.Int32 = 1, updateRoute: Swift.Bool = false, enableVideo: Swift.Bool = true, sdkObserver: SIPFramework.SIPSDKCallbacks = SIPSDKCallbacks(), allowMultipleConnections: Swift.Bool = false, domainNameDirectRegistrar: Swift.Bool = false, doesItSupportBroadcast: Swift.Bool = false, customSessionName: Swift.String? = "", localCallUpdateTime: Swift.Int32 = 60, stunConfig: SIPFramework.STUNConfig? = nil)
+  public init(publicAddr _: Swift.String? = nil, logLevel: Swift.Int32 = 4, port: Swift.UInt32 = 5060, userAgent: Swift.String? = "", workerThreadCount: Swift.Int32 = 1, updateRoute: Swift.Bool = false, enableVideo: Swift.Bool = true, sdkObserver: SIPFramework.SIPSDKCallbacks = SIPSDKCallbacks(), allowMultipleConnections: Swift.Bool = false, domainNameDirectRegistrar: Swift.Bool = false, doesItSupportBroadcast: Swift.Bool = false, customSessionName: Swift.String? = "", localCallUpdateTime: Swift.Int32 = 60, stunConfig: SIPFramework.STUNConfig? = nil)
 }
 public struct REGLocalConfig {
   public var transport: Swift.String?
@@ -94,7 +96,8 @@ public struct REGLocalConfig {
   public var publicAddr: Swift.String?
   public var enableStreamControl: Swift.Int32
   public var streamElapsed: Swift.Int32
-  public init(transport: Swift.String? = nil, username: Swift.String? = nil, port: Swift.UInt32 = 0, boundAddr: Swift.String? = nil, publicAddr: Swift.String? = nil, enableStreamControl: Swift.Bool = false, streamElapsed: Swift.Int32 = 0)
+  public var lockCodec: Swift.UInt32
+  public init(transport: Swift.String? = nil, username: Swift.String? = nil, port: Swift.UInt32 = 0, boundAddr: Swift.String? = nil, publicAddr: Swift.String? = nil, enableStreamControl: Swift.Bool = false, streamElapsed: Swift.Int32 = 0, lockCodec: Swift.UInt32 = 0)
 }
 public struct TURNConfig {
   public var enable: Swift.Int32
@@ -116,8 +119,9 @@ public struct REGConfig {
   public var proxyPort: Swift.UInt32
   public var enableStreamControl: Swift.Int32
   public var streamElapsed: Swift.Int32
+  public var lockCodec: Swift.UInt32
   public var turnConfig: SIPFramework.TURNConfig?
-  public init(domain: Swift.String? = nil, username: Swift.String? = nil, password: Swift.String? = nil, transport: Swift.String? = nil, serverAddr: Swift.String? = nil, serverPort: Swift.UInt32 = 0, headers: [(key: Swift.String, value: Swift.String)]? = nil, proxy: Swift.String? = nil, proxyPort: Swift.UInt32 = 0, enableStreamControl: Swift.Bool = false, streamElapsed: Swift.Int32 = 0, turnConfig: SIPFramework.TURNConfig? = nil)
+  public init(domain: Swift.String? = nil, username: Swift.String? = nil, password: Swift.String? = nil, transport: Swift.String? = nil, serverAddr: Swift.String? = nil, serverPort: Swift.UInt32 = 0, headers: [(key: Swift.String, value: Swift.String)]? = nil, proxy: Swift.String? = nil, proxyPort: Swift.UInt32 = 0, enableStreamControl: Swift.Bool = false, streamElapsed: Swift.Int32 = 0, lockCodec: Swift.UInt32 = 0, turnConfig: SIPFramework.TURNConfig? = nil)
 }
 public struct CallParam {
   public var type: Swift.Int32
@@ -150,7 +154,7 @@ public struct MessageParam {
   public static func hangup(code: Swift.UInt32, callUuid: Swift.UInt64)
   public static func dump()
   public static func removeLicense()
-  public static func handleIpChange()
+  public static func handleIpChange(restart: Swift.Bool, restartDelay: Swift.UInt32)
   @objc deinit
 }
 public struct VideoMediaConfig {

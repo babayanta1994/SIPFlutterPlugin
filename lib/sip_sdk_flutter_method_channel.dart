@@ -7,6 +7,7 @@ import 'package:sip_sdk_flutter/entitys/sip_sdk_message.dart';
 import 'package:sip_sdk_flutter/sip_sdk_callbacks.dart';
 
 import 'entitys/sip_sdk_call_param.dart';
+import 'entitys/sip_sdk_call_status_param.dart';
 import 'entitys/sip_sdk_camera_config.dart';
 import 'entitys/sip_sdk_config.dart';
 import 'entitys/sip_sdk_dtmf_info.dart';
@@ -62,8 +63,8 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
           callbacks.onMessageState(args['state'], message);
           break;
         case 'onCallState':
-          var args = call.arguments as Map;
-          callbacks.onCallState(args['callUUID'], args['state']);
+          var args = Map<String, dynamic>.from(call.arguments);
+          callbacks.onCallState(SIPSDKCallStatusParam.fromJson(args));
           break;
         case 'onExpireWarning':
           var args = call.arguments as Map;
@@ -82,6 +83,9 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
           final state =
               args['state'] is bool ? args['state'] : args['state'] == 1;
           callbacks.onCameraStateChange(state);
+          break;
+        case 'onActivityCheck':
+          callbacks.onActivityCheck();
           break;
         default:
           debugPrint("未知方法: ${call.method}");
@@ -148,19 +152,19 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
-  Future<void> answer(int code, [String? callUUID]) async {
+  Future<void> answer(int code, [String? callUuid]) async {
     return await methodChannel.invokeMethod<void>('answer', {
       'code': code,
-      'callUUID': callUUID,
+      'callUuid': callUuid,
     });
   }
 
   @override
-  Future<void> sendDtmfInfo(int type, String content, String callUUID) async {
+  Future<void> sendDtmfInfo(int type, String content, String callUuid) async {
     return await methodChannel.invokeMethod<void>('sendDtmfInfo', {
       'type': type,
       'content': content,
-      'callUUID': callUUID,
+      'callUuid': callUuid,
     });
   }
 
@@ -180,10 +184,10 @@ class MethodChannelSipSdkFlutter extends SipSdkFlutterPlatform {
   }
 
   @override
-  Future<void> hangup(int code, [String? callUUID]) async {
+  Future<void> hangup(int code, [String? callUuid]) async {
     return await methodChannel.invokeMethod<void>('hangup', {
       'code': code,
-      'callUUID': callUUID,
+      'callUuid': callUuid,
     });
   }
 

@@ -120,7 +120,14 @@ extern "C"
         char public_addr[46];             // 公网IP配置（如果SDK运行在公网环境可以配置公网IP便于穿透）
         sdk_bool_t enable_stream_control; // 流发送控制
         int stream_elapsed;               // 流经过时间
+        unsigned lock_codec;              // 锁定编解码器
     } sip_sdk_local_config;
+
+    typedef struct sip_sdk_ip_change_param
+    {
+        sdk_bool_t restart;     // 是否重启
+        unsigned restart_delay; // 重启延迟，单位毫秒，默认为20ms
+    } sip_sdk_ip_change_param;
 
     typedef struct sip_sdk_registrar_config
     {
@@ -135,6 +142,7 @@ extern "C"
         unsigned proxy_port;                        // 代理端口
         sdk_bool_t enable_stream_control;           // 流发送控制
         int stream_elapsed;                         // 流经过时间
+        unsigned lock_codec;                        // 锁定编解码器
         sip_sdk_turn_config turn_config;            // turn 服务器
     } sip_sdk_registrar_config;
 
@@ -179,6 +187,14 @@ extern "C"
         char *content;                  // 消息内容
     } sip_sdk_dtmf_info_param;
 
+    typedef struct sip_sdk_call_status_param
+    {
+        sdk_uuid_t call_uuid;   // 呼叫ID
+        sdk_status_t state;     // 状态
+        int last_status;        // 状态码
+        char *last_status_text; // 消息内容
+    } sip_sdk_call_status_param;
+
     typedef struct sip_sdk_observer
     {
         void (*on_log_callback)(int level, const char *data, int len);
@@ -189,13 +205,15 @@ extern "C"
         void (*on_dtmf_info)(sip_sdk_dtmf_info_param dtmf_info_param);
         void (*on_message)(sip_sdk_message_param message_param);
         void (*on_message_state)(sdk_status_t state, sip_sdk_message_param message_param);
-        void (*on_call_state)(sdk_uuid_t call_uuid, sdk_status_t state);
+        void (*on_call_status)(sip_sdk_call_status_param param);
         void (*expire_warning_callback)(time_t expire_time, time_t current_time);
+        void (*activity_check_callback)();
     } sip_sdk_observer;
 
     typedef struct sip_sdk_common_config
     {
         int log_level;                           // 日志等级
+        unsigned port;                           // 默认端口
         sdk_bool_t sdk_run;                      // 是否运行SDK
         char user_agent[32];                     // user agent
         int worker_thread_count;                 // 工作线程数量
@@ -234,7 +252,7 @@ extern "C"
 
     sdk_status_t sip_sdk_destroy();
 
-    sdk_status_t sip_sdk_handle_ip_change();
+    sdk_status_t sip_sdk_handle_ip_change(const sip_sdk_ip_change_param ip_change_param);
 
     sdk_status_t local_account(const sip_sdk_local_config local_config);
 

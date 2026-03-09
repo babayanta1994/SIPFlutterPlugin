@@ -9,6 +9,14 @@ public class AudioPlayer {
     private final String TAG = AudioPlayer.class.getName();
     private AudioTrack audioTrack;
 
+    private static class Instance {
+        private static final AudioPlayer instance = new AudioPlayer();
+    }
+
+    public static AudioPlayer instance() {
+        return AudioPlayer.Instance.instance;
+    }
+
     public void init() {
         int sampleRate = 16000;  // 采样率
         int channelConfig = AudioFormat.CHANNEL_OUT_MONO;  // 单声道

@@ -384,7 +384,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     this.printDetails("answer", call.args);
     SIPManager.answer({
       code: call.argument("code"),
-      callUuid: call.argument("callUUID"),
+      callUuid: call.argument("callUuid"),
       video: call.argument("video"),
       sound: call.argument("sound"),
     });
@@ -394,8 +394,8 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
   async hangup(call: MethodCall, result: MethodResult) {
     this.printDetails("hangup", call.args);
     let code: number = call.argument("code");
-    let callUUID: bigint = call.argument("callUUID");
-    SIPManager.hangup(code, callUUID);
+    let callUuid: bigint = call.argument("callUuid");
+    SIPManager.hangup(code, callUuid);
     result.success(null);
   }
 
@@ -403,7 +403,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     this.printDetails("sendDtmfInfo", call.args);
     SIPManager.dtmfInfo({
       dtmfInfoType: call.argument("dtmfInfoType"),
-      callUuid: call.argument("callUUID"),
+      callUuid: call.argument("callUuid"),
       contentType: call.argument("contentType"),
       content: call.argument("content"),
     });

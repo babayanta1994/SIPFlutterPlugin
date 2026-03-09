@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_camera_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_constants.dart';
 import 'package:sip_sdk_flutter_example/sip_manage.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_call_status_param.dart';
 
 // 可选中状态的圆形按钮
 class CircleToggleButton extends StatelessWidget {
@@ -64,7 +65,7 @@ class CircleToggleButton extends StatelessWidget {
 class CallPage extends StatefulWidget {
   final int direction;
   final int callType;
-  final String? callUUID;
+  final String? callUuid;
   final String? username;
   final String? remoteIp;
   final Map<String, String>? headers;
@@ -75,7 +76,7 @@ class CallPage extends StatefulWidget {
     super.key,
     required this.direction,
     required this.callType,
-    this.callUUID,
+    this.callUuid,
     this.username,
     this.remoteIp,
     this.headers,
@@ -88,7 +89,7 @@ class CallPage extends StatefulWidget {
 }
 
 class _CallPageState extends State<CallPage> {
-  late String callUUID;
+  late String callUuid;
   bool showAnswerButton = false;
 
   // 按钮状态
@@ -113,14 +114,14 @@ class _CallPageState extends State<CallPage> {
             .call(SIPSDKConstants.SDK_CALL_TYPE_SERVER,
                 username: widget.username!, headers: widget.headers ?? {})
             .then((value) {
-          callUUID = value!;
+          callUuid = value!;
         });
       } else {
         SIPManage()
             .call(SIPSDKConstants.SDK_CALL_TYPE_IP,
                 remoteIp: widget.remoteIp!, headers: widget.headers ?? {})
             .then((value) {
-          callUUID = value!;
+          callUuid = value!;
         });
       }
     } else {
@@ -128,20 +129,25 @@ class _CallPageState extends State<CallPage> {
       setState(() {
         showAnswerButton = true;
       });
-      callUUID = widget.callUUID ?? "";
+      callUuid = widget.callUuid ?? "";
     }
 
     sipListener = SIPListener(
-      onCallState: (String uuid, int state) {
-        if (uuid == callUUID) {
-          if (state == SIPSDKConstants.CALL_STATE_CONFIRMED) {
+      onCallState: (SIPSDKCallStatusParam param) {
+        if (param.callUuid == callUuid) {
+          if (param.state == SIPSDKConstants.CALL_STATE_CONFIRMED) {
+            // 开始播放音频
+            SIPManage().startPlaying();
+            // 开始录制音频
+            SIPManage().startRecording();
             //呼叫连接打开摄像头
             SIPManage().cameraOpen(SIPSDKCameraConfig(
               index: index,
               width: 640,
               height: 480,
             ));
-          } else if (state == SIPSDKConstants.CALL_STATE_DISCONNECTED) {
+
+          } else if (param.state == SIPSDKConstants.CALL_STATE_DISCONNECTED) {
             closePage();
           }
         }
@@ -192,6 +198,10 @@ class _CallPageState extends State<CallPage> {
     SIPManage().setMute(false);
     //speaker
     SIPManage().setSpeaker(true);
+    // 停止播放音频
+    SIPManage().stopPlaying();
+    // 停止录制音频
+    SIPManage().stopRecording();
     //关闭摄像头
     SIPManage().cameraClose();
     //挂断所有呼叫

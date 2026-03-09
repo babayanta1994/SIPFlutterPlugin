@@ -8,13 +8,9 @@ import com.sip.sdk.SIPSDK;
 import com.sip.sdk.codes.PCMData;
 import com.sip.sdk.i.SIPSDKMediaListener;
 
-import io.flutter.Log;
-
 public class AudioHandle implements SIPSDKMediaListener.PCMReadListener,
         SIPSDKMediaListener.PCMWriteListener {
     private final String TAG = AudioHandle.class.getName();
-    private final AudioPlayer player;
-    private final AudioRecorder recorder;
     protected AudioManager audioManager;
 
     private static class Instance {
@@ -26,8 +22,6 @@ public class AudioHandle implements SIPSDKMediaListener.PCMReadListener,
     }
 
     public AudioHandle() {
-        player = new AudioPlayer();
-        recorder = new AudioRecorder();
         if (audioManager == null) {
             audioManager = (AudioManager) SipSdkFlutterPlugin.context.getSystemService(Context.AUDIO_SERVICE);
         }
@@ -71,14 +65,9 @@ public class AudioHandle implements SIPSDKMediaListener.PCMReadListener,
         return false;
     }
 
-    public void start() {
-        player.init();
-        recorder.init();
-    }
-
     @Override
     public PCMData pcmReadFrame() {
-        byte[] bytes = recorder.recording();
+        byte[] bytes = AudioRecorder.instance().recording();
         if (bytes != null) {
             PCMData pcmData = new PCMData();
             pcmData.data = bytes;
@@ -90,12 +79,7 @@ public class AudioHandle implements SIPSDKMediaListener.PCMReadListener,
 
     @Override
     public int pcmWriteFrame(byte[] data, int dataSize) {
-        player.play(data);
+        AudioPlayer.instance().play(data);
         return 0;
-    }
-
-    public void stop() {
-        player.destroy();
-        recorder.destroy();
     }
 }

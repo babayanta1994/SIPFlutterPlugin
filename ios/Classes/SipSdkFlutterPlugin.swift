@@ -170,12 +170,14 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             onMessage: SIPManage.onMessage,
             onMessageState: SIPManage.onMessageState,
             onCallState: SIPManage.onCallState,
-            onExpireWarning: SIPManage.onExpireWarning
+            onExpireWarning: SIPManage.onExpireWarning,
+            onActivityCheck: SIPManage.onActivityCheck
         )
 
         // 3. 提取 SIPSDKConfig 主结构体字段
         let config = SIPSDKConfig(
             logLevel: Int32(args["logLevel"] as? Int ?? 4),
+            port: args["port"] as? UInt32 ?? 5060,
             userAgent: args["userAgent"] as? String ?? "",
             workerThreadCount: Int32(args["workerThreadCount"] as? Int ?? 1),
             updateRoute: (args["updateRoute"] as? Bool) ?? false,
@@ -259,6 +261,7 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         // 3. 提取 SIPSDKConfig 主结构体字段
         let config = SIPSDKConfig(
             logLevel: Int32(args["logLevel"] as? Int ?? 4),
+            port: args["port"] as? UInt32 ?? 5060,
             userAgent: args["userAgent"] as? String ?? "",
             workerThreadCount: Int32(args["workerThreadCount"] as? Int ?? 1),
             updateRoute: (args["updateRoute"] as? Bool) ?? false,
@@ -290,7 +293,8 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             boundAddr: args["boundAddr"] as? String,
             publicAddr: args["publicAddr"] as? String,
             enableStreamControl: (args["enableStreamControl"] as? Bool) ?? false,
-            streamElapsed: Int32(args["logLevel"] as? Int ?? 0)
+            streamElapsed: Int32(args["logLevel"] as? Int ?? 0),
+            lockCodec: args["lockCodec"] as? UInt32 ?? 0
         )
 
         SIPHandle.localAccount(localConfig: localConfig)
@@ -326,6 +330,7 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
         let proxyPort = UInt32(args["proxyPort"] as? Int ?? 0)
         let enableStreamControl = (args["enableStreamControl"] as? Bool) ?? false
         let streamElapsed = Int32(args["streamElapsed"] as? Int ?? 0)
+        let lockCodec = args["lockCodec"] as? UInt32 ?? 0
 
         let config = REGConfig(
             domain: domain,
@@ -339,6 +344,7 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
             proxyPort: proxyPort,
             enableStreamControl: enableStreamControl,
             streamElapsed: streamElapsed,
+            lockCodec: lockCodec,
             turnConfig: turnConfig
         )
 
@@ -399,8 +405,8 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      */
     private func answer(args: [String: Any], result: @escaping FlutterResult) {
         let code = UInt32(args["code"] as? Int ?? 200)
-        let callUUID = UInt64(args["callUUID"] as? Int ?? 0)
-        SIPHandle.answer(code: code, callUuid: callUUID)
+        let callUuid = UInt64(args["callUuid"] as? Int ?? 0)
+        SIPHandle.answer(code: code, callUuid: callUuid)
         result(nil)
     }
 
@@ -414,9 +420,9 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
     private func sendDtmfInfo(args: [String: Any], result: @escaping FlutterResult) {
         let dtmfInfoType = Int32(args["dtmfInfoType"] as? Int ?? 0)
         let content = args["content"] as? String ?? ""
-        let callUUID = UInt64(args["callUUID"] as? Int ?? 0)
+        let callUuid = UInt64(args["callUuid"] as? Int ?? 0)
         // 发送
-        SIPHandle.sendDtmfInfo(type: dtmfInfoType, callUuid: callUUID, content: content)
+        SIPHandle.sendDtmfInfo(type: dtmfInfoType, callUuid: callUuid, content: content)
         // 成功回调
         result(nil)
     }
@@ -447,8 +453,8 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
      */
     private func hangup(args: [String: Any], result: @escaping FlutterResult) {
         let code = UInt32(args["code"] as? Int ?? 200)
-        let callUUID = UInt64(args["callUUID"] as? Int ?? 0)
-        SIPHandle.hangup(code: code, callUuid: callUUID)
+        let callUuid = UInt64(args["callUuid"] as? Int ?? 0)
+        SIPHandle.hangup(code: code, callUuid: callUuid)
         result(nil)
     }
 
@@ -463,8 +469,10 @@ public class SipSdkFlutterPlugin: NSObject, FlutterPlugin {
     /**
      *  IP 发生改变调用
      */
-    private func handleIpChange(args _: [String: Any], result: @escaping FlutterResult) {
-        SIPHandle.handleIpChange()
+    private func handleIpChange(args: [String: Any], result: @escaping FlutterResult) {
+        let restart = (args["restart"] as? Bool) ?? true
+        let restartDelay = args["restartDelay"] as? UInt32 ?? 500
+        SIPHandle.handleIpChange(restart: restart, restartDelay: restartDelay)
         result(nil)
     }
 

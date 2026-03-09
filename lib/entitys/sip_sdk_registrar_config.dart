@@ -11,6 +11,7 @@ class SIPSDKRegistrarConfig {
   final Map<String, String>? headers;
   final String? proxy;
   final int proxyPort;
+  final int? lockCodec;
   final bool enableStreamControl;
   final int streamElapsed;
   final SIPSDKTURNConfig? turnConfig;
@@ -25,6 +26,7 @@ class SIPSDKRegistrarConfig {
     this.headers,
     this.proxy,
     this.proxyPort = 0,
+    this.lockCodec = 0,
     this.enableStreamControl = false,
     this.streamElapsed = 2,
     this.turnConfig,
@@ -40,6 +42,7 @@ class SIPSDKRegistrarConfig {
         'headers': headers,
         'proxy': proxy,
         'proxyPort': proxyPort,
+        'lockCodec': lockCodec,
         'enableStreamControl': enableStreamControl,
         'streamElapsed': streamElapsed,
         'turnConfig': turnConfig?.toJson(),

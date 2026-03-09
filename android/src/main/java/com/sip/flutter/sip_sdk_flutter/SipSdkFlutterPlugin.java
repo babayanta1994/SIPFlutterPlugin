@@ -4,7 +4,6 @@ import static com.sip.sdk.entity.SDKConstants.SDK_DTMF_INFO_TYPE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +12,8 @@ import com.sip.flutter.sip_sdk_flutter.codes.H264CodecImpl;
 import com.sip.flutter.sip_sdk_flutter.sip.SIPManage;
 import com.sip.flutter.sip_sdk_flutter.utils.MapUtils;
 import com.sip.flutter.sip_sdk_flutter.utils.audio.AudioHandle;
+import com.sip.flutter.sip_sdk_flutter.utils.audio.AudioPlayer;
+import com.sip.flutter.sip_sdk_flutter.utils.audio.AudioRecorder;
 import com.sip.flutter.sip_sdk_flutter.utils.camera.CameraHandle;
 import com.sip.flutter.sip_sdk_flutter.view.VideoComponentFactory;
 import com.sip.sdk.SIPSDK;
@@ -130,6 +131,14 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
             destroy(call.arguments(), result);
         } else if (call.method.equals("handleIpChange")) {
             handleIpChange(call.arguments(), result);
+        } else if (call.method.equals("startRecording")) {
+            startRecording(call.arguments(), result);
+        } else if (call.method.equals("stopRecording")) {
+            stopRecording(call.arguments(), result);
+        } else if (call.method.equals("startPlaying")) {
+            startPlaying(call.arguments(), result);
+        } else if (call.method.equals("stopPlaying")) {
+            stopPlaying(call.arguments(), result);
         } else if (call.method.equals("isMute")) {
             isMute(call.arguments(), result);
         } else if (call.method.equals("setMute")) {
@@ -309,6 +318,7 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
         SIPSDKConfig config = new SIPSDKConfig();
         config.logLevel = MapUtils.get(args, "logLevel", 4);
+        config.port = MapUtils.get(args, "port", 5060);
         config.userAgent = MapUtils.get(args, "userAgent", "");
         config.workerThreadCount = MapUtils.get(args, "workerThreadCount", 1);
         config.updateRoute = MapUtils.get(args, "updateRoute", false);
@@ -334,6 +344,7 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         localConfig.username = MapUtils.get(args, "username", null);
         localConfig.boundAddr = MapUtils.get(args, "boundAddr", null);
         localConfig.publicAddr = MapUtils.get(args, "publicAddr", null);
+        localConfig.lockCodec = MapUtils.get(args, "lockCodec", 0);
         localConfig.enableStreamControl = MapUtils.get(args, "enableStreamControl", false);
         localConfig.streamElapsed = MapUtils.get(args, "streamElapsed", 0);
 
@@ -372,6 +383,7 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
         config.serverPort = MapUtils.get(args, "serverPort", 5060);
         config.proxy = MapUtils.get(args, "proxy", null);
         config.proxyPort = MapUtils.get(args, "proxyPort", 5060);
+        config.lockCodec = MapUtils.get(args, "lockCodec", 0);
         config.enableStreamControl = MapUtils.get(args, "enableStreamControl", false);
         config.streamElapsed = MapUtils.get(args, "streamElapsed", 0);
         config.headers = headers;
@@ -436,18 +448,18 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
     private void answer(Map<String, Object> args, MethodChannel.Result result) {
         int code = MapUtils.get(args, "code", 200);
-        long callUUID = MapUtils.get(args, "callUUID", 0);
-        SIPSDK.answer(code, callUUID);
+        long callUuid = MapUtils.get(args, "callUuid", 0);
+        SIPSDK.answer(code, callUuid);
         result.success(null);
     }
 
     private void sendDtmfInfo(Map<String, Object> args, MethodChannel.Result result) {
-        long callUUID = MapUtils.get(args, "callUUID", 0);
+        long callUuid = MapUtils.get(args, "callUuid", 0);
         int dtmfInfoType = MapUtils.get(args, "dtmfInfoType", SDK_DTMF_INFO_TYPE);
         String content = MapUtils.get(args, "content", null);
         String contentType = MapUtils.get(args, "contentType", null);
         SIPSDKDtmfInfoParam param = new SIPSDKDtmfInfoParam();
-        param.callUuid = callUUID;
+        param.callUuid = callUuid;
         param.dtmfInfoType = dtmfInfoType;
         param.content = content;
         param.contentType = contentType;
@@ -473,11 +485,11 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
 
     private void hangup(Map<String, Object> args, MethodChannel.Result result) {
         int code = MapUtils.get(args, "code", 487);
-        long callUUID = MapUtils.get(args, "callUUID", 0);
-        if (callUUID == 0) {
+        long callUuid = MapUtils.get(args, "callUuid", 0);
+        if (callUuid == 0) {
             SIPSDK.hangup(code);
         } else {
-            SIPSDK.hangupWithUuid(code, callUUID);
+            SIPSDK.hangupWithUuid(code, callUuid);
         }
         result.success(null);
     }
@@ -496,7 +508,41 @@ public class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHandler, Ac
     }
 
     private void handleIpChange(Map<String, Object> args, MethodChannel.Result result) {
-        SIPSDK.handleIpChange();
+        boolean restart = MapUtils.get(args, "restart", true);
+        int restartDelay = MapUtils.get(args, "restartDelay", 500);
+        SIPSDK.handleIpChange(restart, restartDelay);
+        result.success(null);
+    }
+
+    /**
+     * 开始录音
+     */
+    private void startRecording(Map<String, Object> args, MethodChannel.Result result) {
+        AudioRecorder.instance().init();
+        result.success(null);
+    }
+
+    /**
+     * 停止录音
+     */
+    private void stopRecording(Map<String, Object> args, MethodChannel.Result result) {
+        AudioRecorder.instance().destroy();
+        result.success(null);
+    }
+
+    /**
+     * 开始播放
+     */
+    private void startPlaying(Map<String, Object> args, MethodChannel.Result result) {
+        AudioPlayer.instance().init();
+        result.success(null);
+    }
+
+    /**
+     * 停止播放
+     */
+    private void stopPlaying(Map<String, Object> args, MethodChannel.Result result) {
+        AudioPlayer.instance().destroy();
         result.success(null);
     }
 

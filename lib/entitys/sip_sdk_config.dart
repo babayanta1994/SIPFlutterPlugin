@@ -7,6 +7,7 @@ class SIPSDKConfig {
   final String clientId;
   final String clientSecret;
   final int logLevel;
+  final int port;
   final String? userAgent;
   final int workerThreadCount;
   final bool updateRoute;
@@ -26,6 +27,7 @@ class SIPSDKConfig {
     this.clientId = "",
     this.clientSecret = "",
     this.logLevel = 4,
+    this.port = 5060,
     this.userAgent,
     this.workerThreadCount = 1,
     this.updateRoute = false,
@@ -47,6 +49,7 @@ class SIPSDKConfig {
       'clientId': clientId,
       'clientSecret': clientSecret,
       'logLevel': logLevel,
+      'port': port,
       'userAgent': userAgent,
       'workerThreadCount': workerThreadCount,
       'updateRoute': updateRoute,
@@ -69,6 +72,7 @@ class SIPSDKConfig {
       clientId: json['clientId'] as String? ?? "",
       clientSecret: json['clientSecret'] as String? ?? "",
       logLevel: json['logLevel'] is int ? json['logLevel'] as int : 4,
+      port: json['port'] is int ? json['port'] as int : 5060,
       userAgent: json['userAgent'] as String? ?? "",
       workerThreadCount: json['workerThreadCount'] as int? ?? 1,
       updateRoute: json['updateRoute'] as bool? ?? false,

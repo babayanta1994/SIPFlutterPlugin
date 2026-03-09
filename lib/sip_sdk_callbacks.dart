@@ -1,4 +1,5 @@
 import 'entitys/sip_sdk_call_param.dart';
+import 'entitys/sip_sdk_call_status_param.dart';
 import 'entitys/sip_sdk_dtmf_info.dart';
 import 'entitys/sip_sdk_message.dart';
 
@@ -17,9 +18,11 @@ abstract class SIPSDKCallbacks {
 
   void onMessageState(int state, SIPSDKMessage message);
 
-  void onCallState(String callUUID, int state);
+  void onCallState(SIPSDKCallStatusParam param);
 
   void onExpireWarning(DateTime expireTime, DateTime currentTime);
 
   void onCameraStateChange(bool state);
+
+  void onActivityCheck();
 }

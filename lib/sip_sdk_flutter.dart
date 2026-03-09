@@ -59,12 +59,12 @@ class SipSdkFlutter {
     );
   }
 
-  Future<void> answer(int code, [String? callUUID]) {
-    return SipSdkFlutterPlatform.instance.answer(code, callUUID);
+  Future<void> answer(int code, [String? callUuid]) {
+    return SipSdkFlutterPlatform.instance.answer(code, callUuid);
   }
 
-  Future<void> sendDtmfInfo(int type, String content, String callUUID) {
-    return SipSdkFlutterPlatform.instance.sendDtmfInfo(type, content, callUUID);
+  Future<void> sendDtmfInfo(int type, String content, String callUuid) {
+    return SipSdkFlutterPlatform.instance.sendDtmfInfo(type, content, callUuid);
   }
 
   Future<void> sendMessage(
@@ -81,8 +81,8 @@ class SipSdkFlutter {
     );
   }
 
-  Future<void> hangup(int code, [String? callUUID]) {
-    return SipSdkFlutterPlatform.instance.hangup(code, callUUID);
+  Future<void> hangup(int code, [String? callUuid]) {
+    return SipSdkFlutterPlatform.instance.hangup(code, callUuid);
   }
 
   Future<void> dump() {

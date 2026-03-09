@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_call_param.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_call_status_param.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_camera_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_dtmf_info.dart';
@@ -16,7 +17,7 @@ import 'call_page.dart';
 import 'config_storage.dart';
 import 'main.dart';
 
-typedef OnCallState = void Function(String callUUID, int state);
+typedef OnCallState = void Function(SIPSDKCallStatusParam param);
 typedef OnRegistrarState = void Function(int state);
 typedef OnCameraStateChange = void Function(bool state);
 
@@ -81,7 +82,8 @@ class SIPManage implements SIPSDKCallbacks {
       stunConfig = STUNConfig(servers: [server], enableIPv6: enableIPv6);
     }
     final config = SIPSDKConfig(
-      token: "DRv5aKGDEnHZ1C7tI1sfRoNvg2zLDugNkWz6kxG/A9EkdLqyxVthdER087+TKU+EprZm1VySaBqcHabVn5+POw==.avpt1JvaX9WzYCKsbmKd5P4Tbac6dROhcOS6bRT+EYsCYAZPkDq3w+x513I5utzDo0dl+7QGV5y60Giy9eaAwBTDDel8470ohvNsUASMj7jSWMEZfp0K+bXS70jpvS9LAuMzV/I3D47CYghlkFyCZig48+LVqiz6kjMlaDaoz1d0JHTZZV/g/lCU8P2/AtuxdYnKjhzbNflyEiqd72If96ZcI1lQSlbprpjhZlDU3PL7/WKelJy05OQwUE/8sA21fqFYyWLhlnbnWrhuqG1z8ScjFGj5fB1NTBWZwhCOtZVHynLPL/bnVVlMVuTzHtRmFkhRA2pfokjb8yOuLZd3Fg==",
+      token:
+          "DRv5aKGDEnHZ1C7tI1sfRoNvg2zLDugNkWz6kxG/A9EkdLqyxVthdER087+TKU+EprZm1VySaBqcHabVn5+POw==.avpt1JvaX9WzYCKsbmKd5P4Tbac6dROhcOS6bRT+EYsCYAZPkDq3w+x513I5utzDo0dl+7QGV5y60Giy9eaAwBTDDel8470ohvNsUASMj7jSWMEZfp0K+bXS70jpvS9LAuMzV/I3D47CYghlkFyCZig48+LVqiz6kjMlaDaoz1d0JHTZZV/g/lCU8P2/AtuxdYnKjhzbNflyEiqd72If96ZcI1lQSlbprpjhZlDU3PL7/WKelJy05OQwUE/8sA21fqFYyWLhlnbnWrhuqG1z8ScjFGj5fB1NTBWZwhCOtZVHynLPL/bnVVlMVuTzHtRmFkhRA2pfokjb8yOuLZd3Fg==",
       clientId: "1379018005584941056",
       clientSecret: "7489ed9e086e12ab45688c0caf4a7d2b",
       userAgent: 'flutter-1.0',
@@ -163,6 +165,38 @@ class SIPManage implements SIPSDKCallbacks {
     _sipSdkFlutterPlugin.cameraClose();
   }
 
+  void startPlaying() {
+    _sipSdkFlutterPlugin.startPlaying();
+  }
+
+  void stopPlaying() {
+    _sipSdkFlutterPlugin.stopPlaying();
+  }
+
+  void startRecording() {
+    _sipSdkFlutterPlugin.startRecording();
+  }
+
+  void stopRecording() {
+    _sipSdkFlutterPlugin.stopRecording();
+  }
+
+  Future<bool?> isMute() {
+    return _sipSdkFlutterPlugin.isMute();
+  }
+
+  void setMute(bool mute) {
+    _sipSdkFlutterPlugin.setMute(mute);
+  }
+
+  Future<bool?> isSpeaker() {
+    return _sipSdkFlutterPlugin.isSpeaker();
+  }
+
+  void setSpeaker(bool speaker) {
+    _sipSdkFlutterPlugin.setSpeaker(speaker);
+  }
+
   Future<String?> call(
     int type, {
     String? username,
@@ -182,18 +216,18 @@ class SIPManage implements SIPSDKCallbacks {
   }
 
   // 通常情况不用调用接听，因为被叫界面是原生代码
-  void answer(int code, [String? callUUID]) {
-    _sipSdkFlutterPlugin.answer(code, callUUID);
+  void answer(int code, [String? callUuid]) {
+    _sipSdkFlutterPlugin.answer(code, callUuid);
   }
 
   // 通常情况不用调用发送Dtmf Info，因为被叫界面是原生代码
-  void sendDtmfInfo(int type, String content, String callUUID) {
-    _sipSdkFlutterPlugin.sendDtmfInfo(type, content, callUUID);
+  void sendDtmfInfo(int type, String content, String callUuid) {
+    _sipSdkFlutterPlugin.sendDtmfInfo(type, content, callUuid);
   }
 
   // 通常情况不用调用挂断，因为被叫界面是原生代码
-  void hangup(int code, [String? callUUID]) {
-    _sipSdkFlutterPlugin.hangup(code, callUUID);
+  void hangup(int code, [String? callUuid]) {
+    _sipSdkFlutterPlugin.hangup(code, callUuid);
   }
 
   void sendMessage(
@@ -213,22 +247,6 @@ class SIPManage implements SIPSDKCallbacks {
   // 通常情况不用调用dump，这个主要用于调试
   void dump() {
     _sipSdkFlutterPlugin.dump();
-  }
-
-  Future<bool?> isMute() {
-    return _sipSdkFlutterPlugin.isMute();
-  }
-
-  void setMute(bool mute) {
-    _sipSdkFlutterPlugin.setMute(mute);
-  }
-
-  Future<bool?> isSpeaker() {
-    return _sipSdkFlutterPlugin.isSpeaker();
-  }
-
-  void setSpeaker(bool speaker) {
-    _sipSdkFlutterPlugin.setSpeaker(speaker);
   }
 
   @override
@@ -265,9 +283,9 @@ class SIPManage implements SIPSDKCallbacks {
   }
 
   @override
-  void onCallState(String callUUID, int state) {
+  void onCallState(SIPSDKCallStatusParam param) {
     for (final listener in List<SIPListener>.from(_listeners)) {
-      listener.onCallState?.call(callUUID, state);
+      listener.onCallState?.call(param);
     }
   }
 
@@ -282,7 +300,7 @@ class SIPManage implements SIPSDKCallbacks {
         return CallPage(
           direction: direction,
           callType: callParam.callType,
-          callUUID: callParam.callUUID,
+          callUuid: callParam.callUuid,
           username: callParam.username,
           remoteIp: callParam.remoteIp,
           headers: callParam.headers,
@@ -306,4 +324,7 @@ class SIPManage implements SIPSDKCallbacks {
       listener.onCameraStateChange?.call(state);
     }
   }
+
+  @override
+  void onActivityCheck() {}
 }

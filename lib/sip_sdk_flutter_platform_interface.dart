@@ -73,11 +73,11 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('call() has not been implemented.');
   }
 
-  Future<void> answer(int code, [String? callUUID]) {
+  Future<void> answer(int code, [String? callUuid]) {
     throw UnimplementedError('answer() has not been implemented.');
   }
 
-  Future<void> sendDtmfInfo(int type, String content, String callUUID) {
+  Future<void> sendDtmfInfo(int type, String content, String callUuid) {
     throw UnimplementedError('sendDtmfInfo() has not been implemented.');
   }
 
@@ -90,7 +90,7 @@ abstract class SipSdkFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('sendMessage() has not been implemented.');
   }
 
-  Future<void> hangup(int code, [String? callUUID]) {
+  Future<void> hangup(int code, [String? callUuid]) {
     throw UnimplementedError('hangup() has not been implemented.');
   }
 

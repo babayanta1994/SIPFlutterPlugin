@@ -1,11 +1,11 @@
 class SIPSDKDtmfInfo {
-  final String callUUID;
+  final String callUuid;
   final int dtmfInfoType;
   final String contentType;
   final String content;
 
   SIPSDKDtmfInfo({
-    required this.callUUID,
+    required this.callUuid,
     required this.dtmfInfoType,
     required this.contentType,
     required this.content,
@@ -13,7 +13,7 @@ class SIPSDKDtmfInfo {
 
   factory SIPSDKDtmfInfo.fromMap(Map<String, dynamic> map) {
     return SIPSDKDtmfInfo(
-      callUUID: map['callUUID'] ?? '',
+      callUuid: map['callUuid'] ?? '',
       dtmfInfoType: map['dtmfInfoType'] ?? 0,
       contentType: map['contentType'] ?? '',
       content: map['content'] ?? '',
@@ -22,6 +22,6 @@ class SIPSDKDtmfInfo {
 
   @override
   String toString() {
-    return 'SIPSDKDtmfInfo{callUUID: $callUUID, dtmfInfoType: $dtmfInfoType, contentType: $contentType, content: $content}';
+    return 'SIPSDKDtmfInfo{callUuid: $callUuid, dtmfInfoType: $dtmfInfoType, contentType: $contentType, content: $content}';
   }
 }
