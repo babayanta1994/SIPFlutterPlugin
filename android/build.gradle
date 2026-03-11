@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
         maven { url "https://gitee.com/comm2java/sipsdkaar/raw/main/" }
         flatDir {
-            dirs '/Users/yangtao/development/project/SIPSDKAndroid/sipsdk/build/outputs/aar'
+            dirs '/Users/yangtao/development/project/SIPSDKAndroid/sipsdk/build/outputs/aar', '/Users/yangtao/development/project/SIPSDKAndroid/openh264/build/outputs/aar'
         }
     }
 
@@ -22,7 +22,7 @@ rootProject.allprojects {
         mavenCentral()
         maven { url "https://gitee.com/comm2java/sipsdkaar/raw/main/" }
         flatDir {
-            dirs '/Users/yangtao/development/project/SIPSDKAndroid/sipsdk/build/outputs/aar'
+            dirs '/Users/yangtao/development/project/SIPSDKAndroid/sipsdk/build/outputs/aar', '/Users/yangtao/development/project/SIPSDKAndroid/openh264/build/outputs/aar'
         }
     }
 }
@@ -65,5 +65,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     //implementation 'com.sip.sdk:sipsdk:1.0.26'
     implementation(name: "sipsdk-release", ext: "aar")
-    implementation 'com.openh264:openh264api:1.0.1'
+    //implementation 'com.openh264:openh264api:1.0.1'
+    implementation(name: "openh264-release", ext: "aar")
 }

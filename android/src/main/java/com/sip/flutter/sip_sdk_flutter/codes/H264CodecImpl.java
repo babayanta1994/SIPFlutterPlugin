@@ -1,5 +1,7 @@
 package com.sip.flutter.sip_sdk_flutter.codes;
 
+import android.util.Log;
+
 import com.openh264.JNIOpenH264Manage;
 import com.openh264.entity.DecoderConfig;
 import com.openh264.entity.EncoderConfig;
@@ -26,6 +28,13 @@ public class H264CodecImpl extends H264Codec {
     private long decoder = 0;
     private CameraInfo cameraInfo = null;
     private byte[] encodeBuffer = null;
+
+    private final byte[] outData = new byte[MAX_VIDEO_WIDTH * MAX_VIDEO_HEIGHT * 3 / 2];
+    private final int[] outDataSize = new int[1];
+    private final int[] widths = new int[1];
+    private final int[] heights = new int[1];
+    private int decodeFailCount = 0;
+    private long lastKeyframeRequest = 0;
 
     private static final List<DecodeCallback> listeners = new ArrayList<>();
 
@@ -146,23 +155,35 @@ public class H264CodecImpl extends H264Codec {
     @Override
     public int decode(long timestamp, int type, byte[] data, int dataSize) {
         if (decoder == 0 || data == null || dataSize <= 0) return -1;
-
-        int maxSize = MAX_VIDEO_WIDTH * MAX_VIDEO_HEIGHT * 3 / 2;
-        byte[] outData = new byte[maxSize];
-        int[] outDataSize = new int[1];
-        int[] width = new int[1];
-        int[] height = new int[1];
-
-        JNIOpenH264Manage.decode(decoder, data, dataSize, outData, outDataSize, width, height);
-
-        if (outDataSize[0] <= 0 || width[0] <= 0 || height[0] <= 0) {
+        int ret = JNIOpenH264Manage.decode(
+                decoder,
+                data,
+                dataSize,
+                outData,
+                outDataSize,
+                widths,
+                heights
+        );
+        if (ret == 0) {
+            decodeFailCount = 0;
+        } else {
+            decodeFailCount++;
+            if (decodeFailCount >= 10) {
+                long now = System.currentTimeMillis();
+                if (now - lastKeyframeRequest > 1000) {
+                    lastKeyframeRequest = now;
+                    decodeFailCount = 0;
+                    return 10000;
+                }
+            }
             return -1;
         }
-
-        for (DecodeCallback callback : listeners) {
-            callback.onCallback(callUuid, outData, outDataSize, width[0], height[0]);
+        if (outDataSize[0] <= 0 || widths[0] <= 0 || heights[0] <= 0) {
+            return -1;
         }
-
+        for (DecodeCallback callback : listeners) {
+            callback.onCallback(callUuid, outData, outDataSize, widths[0], heights[0]);
+        }
         return 0;
     }
 

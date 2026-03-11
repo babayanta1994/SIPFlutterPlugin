@@ -39,7 +39,7 @@ class SIPSDKMediaConfig {
               enable: true,
               maxWidth: 1920,
               maxHeight: 1080,
-              combinSpsPpsIdr: true,
+              combinSpsPpsIdr: false,
             ),
         encodeConfig = encodeConfig ??
             SIPSDKVideoEncodeConfig(
