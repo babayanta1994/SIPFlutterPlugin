@@ -9338,42 +9338,56 @@
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "StringLiteral",
-      "offset": 1916,
+      "offset": 217,
       "length": 19,
       "value": "\"VIDEO_LAYER_READY\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "IntegerLiteral",
-      "offset": 2132,
+      "offset": 433,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "IntegerLiteral",
-      "offset": 2157,
+      "offset": 458,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
+      "kind": "IntegerLiteral",
+      "offset": 540,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
+      "kind": "IntegerLiteral",
+      "offset": 587,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "StringLiteral",
-      "offset": 9127,
+      "offset": 7704,
       "length": 45,
       "value": "\"Decompression failed with status: \""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "StringLiteral",
-      "offset": 9171,
+      "offset": 7748,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/Codes\/H264Decoder.swift",
       "kind": "StringLiteral",
-      "offset": 9273,
+      "offset": 7850,
       "length": 43,
       "value": "\"No image buffer in decompression callback\""
     },
@@ -9863,42 +9877,49 @@
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "IntegerLiteral",
-      "offset": 7275,
-      "length": 1,
-      "value": "0"
+      "offset": 7299,
+      "length": 5,
+      "value": "10000"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 7445,
+      "offset": 7325,
+      "length": 61,
+      "value": "\"-------------------------------------------: 10000 \n\n\n\n\""
+    },
+    {
+      "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
+      "kind": "StringLiteral",
+      "offset": 7586,
       "length": 41,
       "value": "\"Audio media stream write thread created\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "IntegerLiteral",
-      "offset": 7646,
+      "offset": 7787,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 8120,
+      "offset": 8261,
       "length": 43,
       "value": "\"Audio media stream write thread destroyed\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 8334,
+      "offset": 8475,
       "length": 40,
       "value": "\"Audio media stream read thread created\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 9906,
+      "offset": 10047,
       "length": 42,
       "value": "\"Audio media stream read thread destroyed\""
     },

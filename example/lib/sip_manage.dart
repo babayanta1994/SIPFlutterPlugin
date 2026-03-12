@@ -6,6 +6,7 @@ import 'package:sip_sdk_flutter/entitys/sip_sdk_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_dtmf_info.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_local_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_media_config.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_media_h264_fmtp.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_message.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_registrar_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_stun_config.dart';
@@ -87,8 +88,14 @@ class SIPManage implements SIPSDKCallbacks {
       clientId: "1379018005584941056",
       clientSecret: "7489ed9e086e12ab45688c0caf4a7d2b",
       userAgent: 'flutter-1.0',
-      mediaConfig: SIPSDKMediaConfig(),
+      mediaConfig: SIPSDKMediaConfig(
+        h264Fmtp: SIPSDKMediaH264Fmtp(
+          profileLevelId: "42e01f",
+          packetizationMode: "1",
+        ),
+      ),
       stunConfig: stunConfig,
+      port: 58581,
     );
     _sipSdkFlutterPlugin.initToken(config);
   }
@@ -123,7 +130,7 @@ class SIPManage implements SIPSDKCallbacks {
     if (sconfig == null) {
       return;
     }
-    localAccount();
+    // localAccount();
     Map<String, dynamic>? tconfig =
         await ConfigStorage.load(ConfigStorage.turn_config);
     SIPSDKTURNConfig? turnConfig;
@@ -252,6 +259,8 @@ class SIPManage implements SIPSDKCallbacks {
   @override
   void onInitCompleted(int state, String message) {
     debugPrint("onInitCompleted: $state    $message");
+    debugPrint(
+        "--------------------------------onInitCompleted: $state    $message    \n\n\n\n");
   }
 
   @override
