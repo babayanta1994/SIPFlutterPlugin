@@ -22,11 +22,11 @@ class _MainPageState extends State<MainPage> {
   final TextEditingController passwordController =
       TextEditingController(text: "123456");
   final TextEditingController serverAddrController =
-      TextEditingController(text: "120.79.7.237");
+      TextEditingController(text: "47.115.174.213");
   final TextEditingController serverPortController =
       TextEditingController(text: "5060");
   final TextEditingController proxyController =
-      TextEditingController(text: "120.79.7.237");
+      TextEditingController(text: "47.115.174.213");
   final TextEditingController proxyPortController =
       TextEditingController(text: "5060");
   final TextEditingController callUsernameController =

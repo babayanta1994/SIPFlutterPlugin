@@ -11,6 +11,7 @@ import 'package:sip_sdk_flutter/entitys/sip_sdk_message.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_registrar_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_stun_config.dart';
 import 'package:sip_sdk_flutter/entitys/sip_sdk_turn_config.dart';
+import 'package:sip_sdk_flutter/entitys/sip_sdk_video_encode_config.dart';
 import 'package:sip_sdk_flutter/sip_sdk_callbacks.dart';
 import 'package:sip_sdk_flutter/sip_sdk_flutter.dart';
 
@@ -92,6 +93,17 @@ class SIPManage implements SIPSDKCallbacks {
         h264Fmtp: SIPSDKMediaH264Fmtp(
           profileLevelId: "42e01f",
           packetizationMode: "1",
+        ),
+        encodeConfig: SIPSDKVideoEncodeConfig(
+          enable: true,
+          width: 640,
+          height: 480,
+          fps: 30,
+          bps: 1200000,
+          minBps: 1000000,
+          maxBps: 1500000,
+          frameSkip: true,
+          qp: 24,
         ),
       ),
       stunConfig: stunConfig,
