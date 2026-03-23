@@ -79,6 +79,10 @@ export class SIPManager {
       map.set("expireTime", expireTime);
       map.set("currentTime", currentTime);
       SipSdkFlutterPlugin.channel?.invokeMethod("onExpireWarning", map);
+    },
+    onActivityCheck: () => {
+      let map: Map<Any, Any> = new Map();
+      SipSdkFlutterPlugin.channel?.invokeMethod("onActivityCheck", map);
     }
   };
   static mediaListener: SIPMediaListener = {
@@ -103,6 +107,22 @@ export class SIPManager {
     const context = AppStorageV2.connect(UIContext, 'uiContext', () => new UIContext())?.getHostContext();
     SIPHandle.init(context!, baseUrl, clientId, clientSecret, config, mediaConfig);
   }
+
+  static async initToken(
+    token: string,
+    clientId: string,
+    clientSecret: string,
+    config: SIPSDKConfig,
+    mediaConfig?: SIPSDKMediaConfig
+  ): Promise<number> {
+    //注册回调
+    sip_callback.addListener(SIPManager.listener);
+    //注册媒体回调
+    sip_callback.addMediaListener(SIPManager.mediaListener);
+    //初始化SDK
+    SIPHandle.initToken(token, clientId, clientSecret, config, mediaConfig);
+    return 0;
+  };
 
   static localAccount(localConfig: SIPLocalConfig) {
     SIPHandle.localAccount(localConfig);

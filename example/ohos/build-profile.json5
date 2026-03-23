@@ -32,11 +32,11 @@
         "material": {
           "certpath": "/Users/yangtao/.ohos/config/default_ohos_sIhJgkmS8kd4RPxlbumv8UDEFWcJUjN-SNse5jDmXuE=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B0910E6513013FA61AD30D76AA5FB7A08CA38E2F5A846091BE2D634A50BC479D79DF33AAF2A8DC9",
+          "keyPassword": "0000001A0AC8F67386D741A329474FA058EB012AFD7DE11CB23C7DDD3FD99D0A2B30B977473D642FF652",
           "profile": "/Users/yangtao/.ohos/config/default_ohos_sIhJgkmS8kd4RPxlbumv8UDEFWcJUjN-SNse5jDmXuE=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "/Users/yangtao/.ohos/config/default_ohos_sIhJgkmS8kd4RPxlbumv8UDEFWcJUjN-SNse5jDmXuE=.p12",
-          "storePassword": "0000001B3EBEF25E0C1A0E2C253AE7586F971DEC897BEDABC3442B9A03436AC7FB164D51ED91461BD6C845"
+          "storePassword": "0000001AA4867CC41F39AE968B25367E932CC67804ADB5179528CA4E4B3AE7CC671B7535C5206D124B95"
         }
       }
     ]

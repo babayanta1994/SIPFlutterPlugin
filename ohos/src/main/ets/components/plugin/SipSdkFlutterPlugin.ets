@@ -199,6 +199,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     let clientId: string = call.argument("clientId");
     let clientSecret: string = call.argument("clientSecret");
     //基础配置
+    let port: number = call.argument("port");
     let logLevel: number = call.argument("logLevel");
 
     let userAgent: string = call.argument("userAgent");
@@ -232,6 +233,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     this.printDetails("encodeConfig", encodeConfig);
 
     SIPManager.initToken(token, clientId, clientSecret, {
+      port: port,
       logLevel: logLevel,
       userAgent: userAgent,
       videoEnable: enableVideo,
@@ -293,6 +295,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
       public_addr: call.argument("publicAddr"),
       enableStreamControl: call.argument("enableStreamControl"),
       streamElapsed: call.argument("streamElapsed"),
+      lockCodec: call.argument("lockCodec"),
     });
     result.success(null);
   }
@@ -310,6 +313,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
     let proxyPort: number = call.argument("proxyPort");
     let enableStreamControl: boolean = call.argument("enableStreamControl");
     let streamElapsed: number = call.argument("streamElapsed");
+    let lockCodec: number = call.argument("lockCodec");
 
     // Turn Config
     let turnConfig: Map<Any, Any> = call.argument("turnConfig");
@@ -327,6 +331,7 @@ export default class SipSdkFlutterPlugin implements FlutterPlugin, MethodCallHan
       proxyPort: proxyPort,
       enableStreamControl: enableStreamControl,
       streamElapsed: streamElapsed,
+      lockCodec: lockCodec,
       turnConfig: turnConfig ? {
         enable: turnConfig.get("enable"),
         server: turnConfig.get("server"),

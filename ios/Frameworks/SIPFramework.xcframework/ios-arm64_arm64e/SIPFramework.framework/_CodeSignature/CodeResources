@@ -26,7 +26,7 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		IfJOcMmLrJHk0jVF+D6g3APa15M=
+		Rv361ZSLkZCc6YqYOP90mp5EG0I=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
@@ -42,11 +42,11 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		mq1KkxkKhtHIQbKrPshds3+zJI0=
+		/rTU+RUPXYObHAb5LvPHdzhnpBE=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.abi.json</key>
 		<data>
-		IfJOcMmLrJHk0jVF+D6g3APa15M=
+		Rv361ZSLkZCc6YqYOP90mp5EG0I=
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.private.swiftinterface</key>
 		<data>
@@ -62,7 +62,7 @@
 		</data>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.swiftmodule</key>
 		<data>
-		SxRo+JbrIw+1HC/d9ahFMGnf4aM=
+		5Ca2mZ0GHaNj/Ov5hysyqY8VV7Y=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>make_xcframework.sh</key>
 		<data>
-		wvMgFsowN5Eca1PjC0vABqdH2XE=
+		7d7C1tBUC598sNC9kC+gG+sE4JU=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -107,7 +107,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			5a0BLPoQ4fL4qh1Q3+JOJjAzY8C+1KnRcckghaHSHfI=
+			3ZL9KJjrpLlc37hjJT2DXO545exiXx/RFLlqCeN8eNY=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
@@ -135,14 +135,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iz/tHHHlfKErNVEeG/3uOF4Uoaoaa5tve82EmtQdNcY=
+			jAaUdc2/PIkY2JpIdowhlUdUj1qV8oSkUt140kVt2Qk=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5a0BLPoQ4fL4qh1Q3+JOJjAzY8C+1KnRcckghaHSHfI=
+			3ZL9KJjrpLlc37hjJT2DXO545exiXx/RFLlqCeN8eNY=
 			</data>
 		</dict>
 		<key>Modules/SIPFramework.swiftmodule/arm64e-apple-ios.private.swiftinterface</key>
@@ -170,7 +170,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hqKLC3YDPuuKpMCyUHyTVEjFA+lEDV1ELw2FGNHr9JA=
+			0C84JE6BeErWuQNUMTMZdVXWfq07zhQtmxGcqDzAsp0=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -184,7 +184,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			npPRHczQe+tcrsVLUUWvI1oB8isJhNw65ctSLlO7GNo=
+			wkFOBDfNYmPwMAd2EEoOD27y/a6sSUbVh0gbaHqDTGQ=
 			</data>
 		</dict>
 	</dict>

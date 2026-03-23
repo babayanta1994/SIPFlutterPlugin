@@ -9876,50 +9876,36 @@
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
-      "kind": "IntegerLiteral",
-      "offset": 7299,
-      "length": 5,
-      "value": "10000"
-    },
-    {
-      "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 7325,
-      "length": 61,
-      "value": "\"-------------------------------------------: 10000 \n\n\n\n\""
-    },
-    {
-      "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
-      "kind": "StringLiteral",
-      "offset": 7586,
+      "offset": 7460,
       "length": 41,
       "value": "\"Audio media stream write thread created\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "IntegerLiteral",
-      "offset": 7787,
+      "offset": 7661,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 8261,
+      "offset": 8135,
       "length": 43,
       "value": "\"Audio media stream write thread destroyed\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 8475,
+      "offset": 8349,
       "length": 40,
       "value": "\"Audio media stream read thread created\""
     },
     {
       "filePath": "\/Volumes\/project\/ios\/SIPSDKExample\/SIPFramework\/SIP\/SIPMediaHandle.swift",
       "kind": "StringLiteral",
-      "offset": 10047,
+      "offset": 9921,
       "length": 42,
       "value": "\"Audio media stream read thread destroyed\""
     },
